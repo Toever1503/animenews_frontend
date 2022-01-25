@@ -1,0 +1,25 @@
+.postSumary{
+    display: grid;
+    grid-template-columns: 30% 59%;
+    height: 125px;
+    gap: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid gray;
+}
+.postSumary .postCover{
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+}
+.postSumary .postTitle h3{
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.postSumary .postTitle h3:hover{
+    text-decoration: underline;
+}
+
+.postSumary .postTitle span{
+    font-size: 10px;
+}

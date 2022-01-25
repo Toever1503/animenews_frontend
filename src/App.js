@@ -1,24 +1,29 @@
-import logo from './logo.svg';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+import Home from './site/site_web/Component/Page/Home';
+import SiteLayout from './site/site_web/SiteLayout';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Categoryzz from './site/site_web/Component/Page/Category';
+import AnimeList from './site/site_web/Component/Page/AnimeList';
+import CharacterBirthday from './site/site_web/Component/Page/CharacterBirthday';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<SiteLayout />}>
+          <Route index element={<Home />} />
+          <Route path='anime_trending' element={<AnimeList/>}/>
+          <Route path='sinh_nhat_nhan_vat_anime' element={<CharacterBirthday /> }/>
+          <Route path='sinh_nhat_nhan_vat_anime/:month' element={<CharacterBirthday /> }/>
+          {/* <Route path='anime/{anime-name}/{id}' /> */}
+          {/* <Route path='character/{character-name/{id}}' /> */}
+          <Route path='/:category' element={<Categoryzz/>} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+    </>
   );
 }
 

@@ -1,0 +1,60 @@
+footer{
+    border-top: 2px solid #008cce;
+    color: white !important; 
+}
+footer .footer-content{
+    display: grid;
+    grid-template-columns: repeat(3, 33.3%);
+    gap: 10px;
+}
+footer .footerSibar{
+    padding: 20px;
+}
+footer .footerSibar>div{
+    margin: 10px auto;
+}
+footer .footerSibar .title{
+    color: white !important; 
+    font-size: 15px;
+}
+footer .footerSibar .title::before{
+    content: "";
+    height: 2px;
+    width: 100%;
+    left: 0px;
+    bottom: -5px;
+    position: absolute;
+    background: white;
+}
+footer .footerSibar .title::after{
+    content: "";
+    height: 2px;
+    width: 30%;
+    left: 0px;
+    bottom: -5px;
+    position: absolute;
+    background: #008cce;
+}
+footer .followMe span{
+    margin: 5px;
+    cursor: pointer;
+}
+footer a{
+    text-decoration: none;
+    color: white;
+}
+footer .siteYear{
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 50px);
+    gap: 10px;
+}
+
+footer .copyright{
+    padding-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 49%);
+    gap: 10px;
+    border-top: 1px solid gray;
+    margin-top: 10px;
+}

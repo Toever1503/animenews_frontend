@@ -1,0 +1,8 @@
+.animeCharacterContainer{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 175px);
+    gap: 10px;
+}
+.animeCharacterContainer .ant-card-body{
+    padding: 0;
+}

@@ -1,0 +1,59 @@
+#carouselHome{
+    height: 500px;
+    width: 100%;
+}
+#carouselHome .postContent{
+    background: #00000038;
+}
+#carouselHome>div{
+    height: 100%;
+    width: 50%;
+}
+.carouselHomeRight{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 49%);
+    gap: 5px;
+}
+.ant-carousel, .ant-carousel .slick-slider, .ant-carousel .slick-slider .slick-list, .ant-carousel .slick-slider .slick-track, .slick-slide>div{
+    height: 100%;
+}
+.ant-carousel .slick-dots-top{
+    height: 25px;
+    top: 0;
+    padding-top: 12px;
+}
+.carouselHomeRight .postContent.hide{
+    animation: hidePostContentExcertCustom 0.5s forwards !important;
+}
+
+@keyframes hidePostContentExcertCustom {
+    from{
+       bottom: 0;
+    }
+    to{
+        bottom: -118px;
+    }
+}
+.topCategory{
+    position: relative;
+    z-index: 5;
+}
+.boxCategory{
+    display: grid;
+    grid-template-columns: repeat(4, 24%);
+    grid-template-rows: minmax(200px, 300px);
+    font-size: 14px;
+    position: relative;
+    z-index: 5;
+    gap: 5px;
+}
+.secondCategory .boxCategory{
+    display: grid;
+    grid-template-columns: repeat(4, 24%);
+    grid-template-rows: minmax(300px, 350px);
+}
+.animeContainer{
+    display: grid;
+    grid-template-rows: repeat(5, 120px)
+}
+

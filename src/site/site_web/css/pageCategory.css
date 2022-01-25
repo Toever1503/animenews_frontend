@@ -1,0 +1,6 @@
+.boxContainer{
+    display: grid;
+    grid-template-columns: repeat(3, 33%);
+    gap: 5px;
+    padding: 5px;
+}

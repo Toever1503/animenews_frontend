@@ -1,0 +1,15 @@
+.animeItem{
+    display: grid;
+    grid-template-columns: 30% 59%;
+    gap: 5px;
+}
+
+.animeItem .animeCover{
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    cursor: pointer;
+}
+.animeItem a:hover{
+    text-decoration: underline !important;
+}
