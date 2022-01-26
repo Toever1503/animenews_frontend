@@ -1,4 +1,5 @@
 import { Layout, Menu, Dropdown } from 'antd';
+import { Link } from "react-router-dom";
 import {
     TwitterCircleFilled,
     YoutubeFilled,
@@ -13,6 +14,14 @@ export default function SiteFooter() {
 
     return (
         <Footer style={{ background: 'black' }}>
+
+            {/* <div className="adsFooter">
+                <div className="adsContent ads-2">
+                    <img src='http://www.howtoonlinetips.com/wp-content/uploads/2019/06/HOW-TO-FIX-ADS.TXT-FILE-ISSUE-IN-GOOGLE-ADSENSE.jpeg' alt="" />
+                </div>
+                <div className="closeAds">x</div>
+            </div> */}
+
             <div className="container footer-content">
                 <div className="footerSibar">
                     <div>
@@ -39,14 +48,14 @@ export default function SiteFooter() {
                         <div className="footerSidebar-content">
                             <div className="siteYear">
                                 <Dropdown placement='bottomCenter' overlay={createMenu}>
-                                    <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                    <Link to='#' className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                                         2022 <DownOutlined />
-                                    </a>
+                                    </Link>
                                 </Dropdown>
                                 <Dropdown placement='bottomCenter' overlay={createMenu}>
-                                    <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                    <Link to='#' className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                                         2021 <DownOutlined />
-                                    </a>
+                                    </Link>
                                 </Dropdown>
                             </div>
                         </div>
@@ -66,7 +75,7 @@ export default function SiteFooter() {
                 <div style={{ marginRight: '10px' }}>
                     <p className='m-0'>© 2021-2022&nbsp;Animenews</p> 
                     <p>Powered by WordPress&nbsp;-&nbsp;
-                        <a href='https://www.facebook.com/AnimePhims' title="Hamgamweb" target='_blank'>Follow Anime News</a>
+                        <a href='https://www.facebook.com/AnimePhims' rel='noreferrer noopener' className='text-white' title="Hamgamweb" target='_blank'>Follow Anime News</a>
                     </p>
                 </div>
                 <div>

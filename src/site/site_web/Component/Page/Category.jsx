@@ -1,13 +1,13 @@
 import { useParams } from "react-router-dom";
 import BreadCrumb from '../../../component/BreadCrumb';
 import PostBox from "../Post/PostBox";
-import PostSumary from "../Post/PostSumary";
+// import PostSumary from "../Post/PostSumary";
 import { PageHeader, Pagination } from 'antd';
 import '../../css/pageCategory.css';
 
 export default function Categoryzz() {
     const { category } = useParams();
-    const breadCrumbRoutes = new Array();
+    const breadCrumbRoutes = [];
     breadCrumbRoutes.push(category);
 
     const pageSize = [9, 12, 36];
@@ -17,9 +17,9 @@ export default function Categoryzz() {
 
     return (
         <>
-            <div className="main-content">
+            <div className="main-content pageCategory">
                 <div className="boxContainer">
-                    <div className="categoryInfo" style={{ gridColumn: '1 / 4' }}>
+                    <div className="categoryInfo" style={{ gridColumn: '1 / 10' }}>
                         <BreadCrumb create={breadCrumbRoutes} />
                         <PageHeader title='Category' subTitle='post category' style={{padding: 0}} />
                     </div>
@@ -28,15 +28,17 @@ export default function Categoryzz() {
                     <PostBox />
                     <PostBox />
                     <PostBox />
+                    
                     <PostBox />
                     <PostBox />
                     <PostBox />
                     <PostBox />
-                    <div className="pageNumber" style={{ gridColumn: '1 / 4', margin: '10px auto' }}>
+                    <PostBox />
+                    <div className="pageNumber" style={{ gridColumn: '1 / 10', margin: '10px auto' }}>
                         <Pagination defaultCurrent={1} total={99} pageSizeOptions={pageSize} defaultPageSize={12} onChange={pageIndexChange} />
                     </div>
                 </div>
-                <article>
+                {/* <article>
                     <div className="suggestPost">
                         <h3 className="title">Bài viết đề xuất</h3>
                         <div className="suggestPostContainer">
@@ -50,7 +52,7 @@ export default function Categoryzz() {
                             <PostSumary />
                         </div>
                     </div>
-                </article>
+                </article> */}
             </div>
         </>
     );

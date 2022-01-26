@@ -1,6 +1,9 @@
 .boxContainer{
     display: grid;
-    grid-template-columns: repeat(3, 33%);
+    grid-template-columns: repeat(5, 200px);
     gap: 5px;
     padding: 5px;
+}
+.main-content.pageCategory{
+    display: block;
 }

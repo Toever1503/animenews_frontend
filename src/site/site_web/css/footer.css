@@ -58,3 +58,27 @@ footer .copyright{
     border-top: 1px solid gray;
     margin-top: 10px;
 }
+
+.adsContent{
+    width: 100%;
+}
+footer .adsFooter .adsContent{
+    height: 100%;
+}
+footer .adsFooter{
+    position: fixed;
+    height: 200px;
+    width: 93%;
+    bottom: 5%;
+    z-index: 100;
+}
+footer .adsFooter .closeAds{
+    display: inline-block;
+    background-color: cadetblue;
+    padding: 1px;
+    position: absolute;
+    right: 0;
+    top: -5px;
+    z-index: 10;
+    border-radius: 5px;
+}

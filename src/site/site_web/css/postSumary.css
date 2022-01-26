@@ -10,6 +10,7 @@
     height: 100%;
     width: 100%;
     cursor: pointer;
+    background-size: cover;
 }
 .postSumary .postTitle h3{
     font-size: 12px;

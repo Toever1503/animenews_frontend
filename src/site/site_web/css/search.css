@@ -1,0 +1,29 @@
+.searchFilter{
+    border: 1px solid gainsboro;
+    border-radius: 5px;
+    padding: 5px;
+}
+.searchFilter .title{
+    display: inline-block;
+    border-bottom: 1px solid cyan;
+}
+.searchFilter .filterContainer{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 250px);
+    gap: 5px;
+}
+.searchFilter .filterContainer .filterItem{
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.containerSearch{
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+}
+
+.searchTitle .ant-page-header-heading-sub-title{
+    color: red;
+    font-size: 20px;
+}

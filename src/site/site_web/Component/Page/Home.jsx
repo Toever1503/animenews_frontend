@@ -3,7 +3,6 @@ import '../../css/home.css';
 import PostCarousel from '../carousel/PostCarousel';
 import PostBox from '../Post/PostBox';
 import BreadCrumb from '../../../component/BreadCrumb';
-import PostBoxHorizontal from '../Post/PostBoxHorizontal';
 import AnimeItem from '../Post/AnimeItem';
 import PostSumary from '../Post/PostSumary';
 
@@ -86,6 +85,8 @@ export default function Home() {
                     </div>
                 </div>
                 <article>
+                    <div className="adsContent ads-2">
+                    </div>
                     <div className="popularAnime">
                         <h3 className="title">Top anime tuần</h3>
                         <div className="animeContainer">

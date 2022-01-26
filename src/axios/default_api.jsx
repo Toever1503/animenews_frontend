@@ -21,7 +21,14 @@ export default instance;
 export const auth_bearer = () => {
   return {
     headers: {
-      'Authorization': `Bearer` 
+      'Authorization': `Bearer`
     }
   };
+}
+
+export const getAuth = () => {
+  // let metaAuth = document.querySelector('meta[name="description"]');
+  // if (metaAuth == null) return null;
+  // else return metaAuth.content
+  return 'ok';
 }
