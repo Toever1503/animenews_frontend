@@ -1,6 +1,6 @@
 import { PageHeader, Pagination, Card } from 'antd';
 import BreadCrumb from '../../../component/BreadCrumb';
-import '../../css/animeCharacterList.css';
+import '../../css/anime.css';
 
 export default function AnimeList() {
     const breadCrumbRoutes = [{

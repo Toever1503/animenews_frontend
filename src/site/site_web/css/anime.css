@@ -1,0 +1,52 @@
+.animeCharacterContainer{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 175px);
+    gap: 10px;
+}
+.animeCharacterContainer .ant-card-body{
+    padding: 0;
+}
+.animeDetail{
+    display: grid;
+    grid-template-columns: 25% 74%;
+    min-height: 500px;
+    margin-bottom: 20px;
+}
+.animeDetail .animeStats{
+    border: 1px solid gray;
+    padding: 10px;
+}
+.animeDetail .animeInfo{
+    border: 1px solid cyan;
+    padding: 10px;
+}
+
+.animeDetail .animeStats .animeImage{
+    height: 350px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid gray;
+}
+
+.animeDetail .animeStats .title
+{
+    font-weight: 500;
+    margin: 10px 0;
+    padding: 0;
+}
+.animeDetail .animeStats .stats .title p{
+    font-size: 13px;
+    font-weight: unset;
+    padding: 0;
+    margin: 0;
+}
+.animeDetail .animeInfo .animeDesctiption{
+    min-height: 300px;
+}
+.animeDetail .animeInfo .animeDesctiption .animeName{
+    text-align: center;
+}
+
+.animeDetail .animeInfo .relatedCharacter, .animeDetail .animeInfo .relatedAnime{
+    margin: 10px auto;
+    border-top: 1px solid gainsboro;
+}

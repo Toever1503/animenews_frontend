@@ -57,3 +57,7 @@
     grid-template-rows: repeat(5, 120px)
 }
 
+.suggestPost .title{
+    display: inline-block;
+    border-bottom: 2px solid cyan;
+}
