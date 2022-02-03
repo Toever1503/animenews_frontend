@@ -21,10 +21,10 @@ export default function CharacterBirthday() {
         console.log(e.target)
     }
 
-    const [currentDayMonth, updateCurrentDayMonth] = useState({
-        day: 1,
-        month: 1
-    });
+    // const [currentDayMonth, updateCurrentDayMonth] = useState({
+    //     day: 1,
+    //     month: 1
+    // });
 
     const gridStyle = {
         width: '8.33%',
@@ -52,8 +52,8 @@ export default function CharacterBirthday() {
         setDays(ds);
     }
 
-    const changeDay = (e) => {
-    }
+    // const changeDay = (e) => {
+    // }
 
     useEffect(()=>{
         initialDayList(31);

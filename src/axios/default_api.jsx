@@ -1,4 +1,4 @@
-import axios from "axios"; 'axios';
+import axios from "axios";
 
 const axiosConfig = {
   baseURL: 'http://localhost:8000/api',
@@ -26,9 +26,3 @@ export const auth_bearer = () => {
   };
 }
 
-export const getAuth = () => {
-  // let metaAuth = document.querySelector('meta[name="description"]');
-  // if (metaAuth == null) return null;
-  // else return metaAuth.content
-  return 'ok';
-}

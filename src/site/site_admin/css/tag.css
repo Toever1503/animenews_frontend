@@ -1,0 +1,24 @@
+.adminContent .tagContent {
+    display: grid;
+    grid-template-columns: 30% 70%;
+}
+
+.adminContent .tagContent .newTag{
+    border-top: 1px solid gainsboro;
+    padding: 20px;
+}
+
+.adminContent .tagContent .newTag form>div{
+    margin: 0 0 12px;
+}
+.adminContent .tagContent .newTag form .title{
+    font-size: 14px;
+}
+
+.adminContent .tagContent .tagList{
+    border-left: 1px solid gray;
+    padding: 10px;
+}
+.adminContent .tagContent .tagList .itemAction span{
+    padding: 0 2px;
+}
