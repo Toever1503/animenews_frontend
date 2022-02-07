@@ -1,6 +1,8 @@
 import '../../css/tag.css';
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, Table } from 'antd';
+import { Form, Input, Button, Select, Table, Modal } from 'antd';
+import { addTag, updateTag, deleteTags } from '../../../../axios/common_api/tag_api';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 const url = 'http://localhost:8080/api/tag';
 
@@ -9,62 +11,10 @@ export default function TagManage() {
     const { Option } = Select;
     const [currentBulkAct, setCurrentBulkAct] = useState('');
     const [rowsSelected, setRowsSelected] = useState([]);
+    const [typeForm, setTypeForm] = useState('add');
 
+    const [form] = Form.useForm();
     const [errorMessage, setErrorMesaage] = useState(null);
-    const onSubmit = (data) => {
-        console.log(data);
-        setErrorMesaage('fsfak')
-    }
-    const onSearch = (e) => {
-        console.log(e.length)
-    }
-
-    const onDelete = (e) => {
-        alert('delete ===')
-    }
-
-    const deleteBulk = () => {
-        alert('delete ===')
-        console.log(rowsSelected)
-    }
-
-    const onchangeBulk = (e) => {
-        setCurrentBulkAct(e);
-        console.log(e)
-    }
-
-    const onClickBulk = (e) => {
-        if(currentBulkAct === 'delete')
-            deleteBulk();
-    }
-
-    const columns = [
-        {
-            title: 'Name',
-            dataIndex: 'tagName',
-            render: (txt) => (<>{txt}
-                <div className="itemAction d-flex">
-                    <span>Edit</span>
-                    <span style={{ borderLeft: '1px solid gray', borderRight: '1px solid gray' }} onClick={() => onDelete(this)}>Delete</span>
-                    <span>View</span>
-                </div>
-            </>),
-            sorter: (a, b) => a.name.length - b.name.length,
-        },
-        {
-            title: 'Slug',
-            dataIndex: 'tagSlug',
-            sorter: (a, b) => a.name.length - b.name.length,
-        }
-    ];
-
-    const rowSelection = {
-        onChange: (selectedRowKeys, selectedRows) => {
-            setRowsSelected(selectedRowKeys);
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        },
-        selectedRowKeys: rowsSelected
-    };
 
     const pageIndexChange = (page, pageSize) => {
         fetchData(page, pageSize);
@@ -81,6 +31,138 @@ export default function TagManage() {
         },
         loading: false,
     });
+
+    const onSubmit = (body) => {
+        console.log(body);
+        if (typeForm === 'add') {
+            //add tag
+            addTag(body).then(res => {
+                console.log(res);
+                if (res.status === 200) {
+                    fetchData(1, 15);
+                    setTypeForm('add');
+                    form.resetFields();
+                }
+                else {
+                    setErrorMesaage('update failed. Code: 500');
+                }
+            }).catch(err => {
+                console.log(err);
+                setErrorMesaage('server error: code 500');
+            });
+        } else {
+            updateTag(body).then(res => {
+                console.log(res.data);
+                if (res.status === 200) {
+                    console.log('update success');
+                    let updateData = content.data.map(item => {
+                        if (item.key === res.data.key)
+                            return res.data;
+                        return item;
+                    });
+
+                    setContent({
+                        data: updateData,
+                        pagination: content.pagination,
+                        loading: content.loading
+                    });
+
+                    setTypeForm('add');
+                    form.resetFields();
+                } else
+                    setErrorMesaage('update failed. Code: 500');
+            }).catch(err => console.log(err));
+            //update tag    
+        }
+    }
+    const onSearch = (e) => {
+        console.log(e.length)
+    }
+
+    const onDelete = (e) => {
+        alert('delete ===')
+    }
+
+    const deleteBulk = () => {
+        console.log(rowsSelected);
+        if (rowsSelected.length > 0)
+            Modal.confirm({
+                title: 'Confirm',
+                icon: <ExclamationCircleOutlined />,
+                content: 'Are you sure want to delete these tag?',
+                okText: 'Yes',
+                cancelText: 'Cancel',
+                onOk: () => {
+                    deleteTags(rowsSelected).then(res => {
+                        console.log(res);
+                        if (res.status === 200 && res.data === true) {
+                            fetchData(content.pagination.current, content.pagination.pageSize);
+                            setRowsSelected([]);
+                            alert('delete success');
+                        }
+                        else 
+                            alert('delete failed. Code: 500');
+                    }).catch(err => console.log(err));
+                }
+            });
+        else
+            alert('Please select tag to delete');
+    }
+
+    const onchangeBulk = (e) => {
+        setCurrentBulkAct(e);
+        console.log(e)
+    }
+
+    const onClickBulk = (e) => {
+        if (currentBulkAct === 'delete')
+            deleteBulk();
+    }
+
+    const onEdit = (obj) => {
+        form.setFieldsValue(
+            { key: obj.key, tagName: obj.tagName, tagSlug: obj.tagSlug }
+        );
+        setTypeForm('edit');
+    }
+
+    const clearForm = () => {
+        setTypeForm('add');
+        form.resetFields();
+    }
+
+    const columns = [
+        {
+            title: 'Name',
+            dataIndex: 'tagName',
+            render: (txt, row) => (<>{txt}
+                <div className="itemAction d-flex">
+                    <span onClick={() => onEdit(row)}>Edit</span>
+                    <span style={{ borderLeft: '1px solid gray', borderRight: '1px solid gray' }} onClick={() => onDelete(this)}>Delete</span>
+                    <span>View</span>
+                </div>
+            </>),
+            key: 'tagName',
+            sorter: (a, b) => a.name.length - b.name.length,
+        },
+        {
+            title: 'Slug',
+            dataIndex: 'tagSlug',
+            key: 'tagSlug',
+            sorter: (a, b) => a.name.length - b.name.length,
+        }
+    ];
+
+    const rowSelection = {
+        onChange: (selectedRowKeys, selectedRows) => {
+            setRowsSelected(selectedRowKeys);
+            // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        },
+        selectedRowKeys: rowsSelected
+    };
+
+
+
 
     const fetchData = (page, size) => {
         // setContent({ loading: true });
@@ -128,11 +210,17 @@ export default function TagManage() {
                         layout='vertical'
                         labelAlign="left"
                         onFinish={onSubmit}
+                        form={form}
                     >
-                        <h3 className="title">Add New Tag</h3>
+                        <h3 className="title">{typeForm === 'add' ? 'Add New' : 'Edit'} Tag</h3>
+                        <Form.Item hidden={true}
+                            name='key'>
+                            <Input />
+                        </Form.Item>
+
                         <Form.Item
                             label="Name"
-                            name="name"
+                            name="tagName"
                             rules={[
                                 {
                                     required: true,
@@ -144,27 +232,18 @@ export default function TagManage() {
 
                         <Form.Item
                             label="Slug"
-                            name="slug"
-                            rules={[
-                                {
-                                    required: true,
-                                },
-                            ]}
+                            name="tagSlug"
                         >
                             <Input />
                         </Form.Item>
-                        <Form.Item
-                            label="Description"
-                            name="description"
-                        >
-                            <Input />
-                        </Form.Item>
-
                         {errorMessage != null && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
                         <Form.Item>
                             <Button type="primary" htmlType="submit">
-                                Add New
+                                {typeForm === 'add' ? 'Add' : 'Edit'}
+                            </Button>
+                            <Button onClick={() => clearForm()} style={{ marginLeft: 2 }} type="primary">
+                                Clear
                             </Button>
                         </Form.Item>
                     </Form>

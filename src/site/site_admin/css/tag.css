@@ -19,6 +19,18 @@
     border-left: 1px solid gray;
     padding: 10px;
 }
+
+.adminContent .tagContent .tagList .itemAction{
+    visibility: hidden;
+}
 .adminContent .tagContent .tagList .itemAction span{
     padding: 0 2px;
+    font-size: 11px;
+}
+.adminContent .tagContent .tagList .itemAction span:hover{
+    color: grey;
+    cursor: pointer;
+}
+.tagTable table tbody td:nth-child(2):hover .itemAction{
+    visibility: visible;
 }
