@@ -7,7 +7,7 @@ export const getTag = (id) => {
 }
 
 export const getTags = (page, size) => {
-    return instance.get(baseUrl + '?page=' + page + '&size=' + size);
+    return instance.get(baseUrl + '?page=' + page + '&size=' + size+'&sort=id,desc');
 }
 
 export const addTag = (body) => {
@@ -15,7 +15,7 @@ export const addTag = (body) => {
 }
 
 export const updateTag = (body) => {
-    return instance.patch(baseUrl + body.key, body, auth_bearer);
+    return instance.patch(baseUrl + body.id, body, auth_bearer);
 }
 
 export const deleteTag = (id) => {

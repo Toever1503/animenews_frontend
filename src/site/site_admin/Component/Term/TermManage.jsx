@@ -1,10 +1,10 @@
 import '../../css/tag.css';
 import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Select, Table, Modal, notification } from 'antd';
-import { addTag, updateTag, deleteTags, deleteTag, getTags } from '../../../../axios/common_api/tag_api';
+import { addTerm, updateTerm, deleteTerms, deleteTerm, getTerms } from '../../../../axios/common_api/term_api';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
-export default function TagManage() {
+export default function TermManage() {
     const { Search } = Input;
     const { Option } = Select;
     const [currentBulkAct, setCurrentBulkAct] = useState('');
@@ -33,8 +33,8 @@ export default function TagManage() {
     const onSubmit = (body) => {
         console.log(body);
         if (typeForm === 'add') {
-            //add tag
-            addTag(body).then(res => {
+            //add Term
+            addTerm(body).then(res => {
                 console.log(res);
                 if (res.status === 200) {
                     fetchData(1, 15);
@@ -49,7 +49,7 @@ export default function TagManage() {
                 setErrorMessage('server error: code 500');
             });
         } else {
-            updateTag(body).then(res => {
+            updateTerm(body).then(res => {
                 console.log(res.data);
                 if (res.status === 200) {
                     console.log('update success');
@@ -69,7 +69,7 @@ export default function TagManage() {
                 } else
                     setErrorMessage('Update failed. Code: 500');
             }).catch(err => console.log(err));
-            //update tag    
+            //update Term    
         }
     }
     const onSearch = (e) => {
@@ -78,7 +78,7 @@ export default function TagManage() {
 
     const onDelete = (e) => {
         showModalConfirm(() => {
-            deleteTag(e.id).then(res => {
+            deleteTerm(e.id).then(res => {
                 if (res.status === 200 && res.data === true) {
                     fetchData(content.pagination.current, content.pagination.pageSize);
                     openNotification('success', 'Delete successfully!');
@@ -93,7 +93,7 @@ export default function TagManage() {
         console.log(rowsSelected);
         if (rowsSelected.length > 0)
             showModalConfirm(() => {
-                deleteTags(rowsSelected).then(res => {
+                deleteTerms(rowsSelected).then(res => {
                     if (res.status === 200 && res.data === true) {
                         fetchData(content.pagination.current, content.pagination.pageSize);
                         setRowsSelected([]);
@@ -104,14 +104,14 @@ export default function TagManage() {
                 }).catch(err => console.log(err));
             });
         else
-            openNotification('warning', 'Please select tag to delete');
+            openNotification('warning', 'Please select Term to delete');
     }
 
     const showModalConfirm = (func) => {
         Modal.confirm({
             title: 'Confirm',
             icon: <ExclamationCircleOutlined />,
-            content: 'Are you sure want to delete these tag?',
+            content: 'Are you sure want to delete these Term?',
             okText: 'Yes',
             cancelText: 'Cancel',
             onOk: func
@@ -136,7 +136,7 @@ export default function TagManage() {
 
     const onEdit = (obj) => {
         form.setFieldsValue(
-            { id: obj.id, name: obj.name, slug: obj.slug }
+            { id: obj.id, name: obj.name, slug: obj.slug, description: obj.description }
         );
         setTypeForm('edit');
     }
@@ -165,6 +165,12 @@ export default function TagManage() {
             dataIndex: 'slug',
             key: 'slug1',
             sorter: (a, b) => a.slug.length - b.slug.length,
+        },
+        {
+            title: 'Description',
+            dataIndex: 'description',
+            key: 'description1',
+            sorter: (a, b) => a.description.length - b.description.length,
         }
     ];
 
@@ -176,16 +182,12 @@ export default function TagManage() {
         selectedRowKeys: rowsSelected
     };
 
-
-
-
     const fetchData = (page, size) => {
-
         setContent({ loading: true });
-
-        getTags(page - 1, size)
+        getTerms(page-1, size)
             .then(res => {
                 const { data } = res;
+                console.log(data)
                 setContent({
                     loading: false,
                     data: data.content,
@@ -197,7 +199,7 @@ export default function TagManage() {
                         // 200 is mock data, you should read it from server
                     },
                 });
-            }).catch(err => console.log(err));
+            });
     };
 
     useEffect(() => {
@@ -209,7 +211,7 @@ export default function TagManage() {
         <>
 
             <div className="titleMagage">
-                <h3 className="title">Tags</h3>
+                <h3 className="title">Terms</h3>
             </div>
             <div className="tagContent">
                 <div className="newTag">
@@ -219,7 +221,7 @@ export default function TagManage() {
                         onFinish={onSubmit}
                         form={form}
                     >
-                        <h3 className="title">{typeForm === 'add' ? 'Add New' : 'Edit'} Tag</h3>
+                        <h3 className="title">{typeForm === 'add' ? 'Add New' : 'Edit'} Term</h3>
                         <Form.Item hidden={true} initialValue={null}
                             name='id'>
                             <Input />
@@ -243,6 +245,14 @@ export default function TagManage() {
                         >
                             <Input />
                         </Form.Item>
+
+                        <Form.Item
+                            label="Description"
+                            name="description"
+                        >
+                            <Input />
+                        </Form.Item>
+
                         {errorMessage != null && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
                         <Form.Item>

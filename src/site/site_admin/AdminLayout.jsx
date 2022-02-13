@@ -36,6 +36,9 @@ export default function AdminLayout() {
         console.log('click ', e.key);
         navigate('/admin/' + e.key);
     };
+    const handleSubMenuClick = e => {
+        navigate('/admin/' + e.key.replace('sub', '').toLowerCase());
+    }
 
     return (
         <>
@@ -57,12 +60,12 @@ export default function AdminLayout() {
 
                         <Menu.Item key="admin" icon={<DashboardOutlined />}>Dashboard</Menu.Item>
 
-                        <SubMenu key="subPages" icon={<PartitionOutlined />} title="Pages">
+                        <SubMenu key="subPages" icon={<PartitionOutlined />} title="Pages" onTitleClick={(e)=> handleSubMenuClick(e)}>
                             <Menu.Item key="pages">All Pages</Menu.Item>
                             <Menu.Item key="page_new" icon={<FormOutlined />}>Add New</Menu.Item>
                         </SubMenu>
 
-                        <SubMenu key="subPosts" icon={<PartitionOutlined />} title="Posts">
+                        <SubMenu key="subPosts" icon={<PartitionOutlined />} title="Posts" onTitleClick={(e)=> handleSubMenuClick(e)}>
                             <Menu.Item key="posts">All Posts</Menu.Item>
                             <Menu.Item key="post_new" icon={<FormOutlined />}>Add New</Menu.Item>
 
@@ -70,25 +73,25 @@ export default function AdminLayout() {
                             <Menu.Item key="categories" icon={<TagOutlined />}>Categories</Menu.Item>
                         </SubMenu>
 
-                        <SubMenu key="subAnime" icon={<PartitionOutlined />} title="Anime Media">
-                            <SubMenu key="sub-media" title="Animes">
+                        <SubMenu key="subAnimeMedia" icon={<PartitionOutlined />} title="Anime Media" >
+                            <SubMenu key="subAnimes" title="Animes" onTitleClick={(e)=> handleSubMenuClick(e)}>
                                 <Menu.Item key="animes">All Animes</Menu.Item>
                                 <Menu.Item key="anime_new" icon={<FormOutlined />}>Add New</Menu.Item>
                             </SubMenu>
-                            <SubMenu key="subCharacter" title="Characters">
+                            <SubMenu key="subCharacters" title="Characters" onTitleClick={(e)=> handleSubMenuClick(e)}>
                                 <Menu.Item key="characters">All Characters</Menu.Item>
                                 <Menu.Item key="character_new" icon={<FormOutlined />}>Add New</Menu.Item>
                             </SubMenu>
                         </SubMenu>
 
-                        <SubMenu key="subComment" icon={<PartitionOutlined />} title="Comments">
+                        <SubMenu key="subComments" icon={<PartitionOutlined />} title="Comments" onTitleClick={(e)=> handleSubMenuClick(e)}>
                             <Menu.Item key="comments">All Comments</Menu.Item>
                             <Menu.Item key="comment_new" icon={<FormOutlined />}>Add New</Menu.Item>
                         </SubMenu>
 
                         <Menu.Item key="medias" icon={<PictureOutlined />}>Media</Menu.Item>
 
-                        <SubMenu key="subUser" icon={<UsergroupDeleteOutlined />} title="Users">
+                        <SubMenu key="subUsers" icon={<UsergroupDeleteOutlined />} title="Users" onTitleClick={(e)=> console.log(e)}>
                             <Menu.Item key="users">All Users</Menu.Item>
                             <Menu.Item key="user_new" icon={<UserAddOutlined />}>Add New</Menu.Item>
                         </SubMenu>

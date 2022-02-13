@@ -13,6 +13,9 @@ import Search from './site/site_web/Component/Page/Search';
 import AdminLayout from './site/site_admin/AdminLayout';
 import MediaModal from './site/site_admin/Component/Media/MediaModal';
 import TagManage from './site/site_admin/Component/Tag/TagManage';
+import TermManage from './site/site_admin/Component/Term/TermManage';
+import UserManage from './site/site_admin/Component/User/UserManage';
+import UserNewEdit from './site/site_admin/Component/User/UserNewEdit';
 
 function App() {
   return (
@@ -38,12 +41,12 @@ function App() {
           <Route path='page_new' element={'new page'} />
 
           <Route path='posts' element={'all posts'} />
-            <Route path='post_new' element={'new posts'} />
+          <Route path='post_new' element={'new posts'} />
 
           <Route path='tags' element={<TagManage />}/>
           <Route path='tag_new' element={'new tag'} />
 
-          <Route path='categories' element={'all terms'}/>
+          <Route path='categories' element={<TermManage />} />
           <Route path='term_new' element={'new term'} />
 
           <Route path='animes' element={'all animes'} />
@@ -57,8 +60,8 @@ function App() {
 
           <Route path='medias' element={<MediaModal/>} />
 
-          <Route path='Users' element={'all Users'} />
-          <Route path='user_new' element={'new user'} />
+          <Route path='Users' element={<UserManage />} />
+          <Route path='user_new' element={<UserNewEdit />} />
 
           <Route path='settings' element={'all settings'} />
         </Route>

@@ -4,3 +4,14 @@
 .adminContent .titleMagage .title{
     font-size: 17px;
 }
+
+.userManage .tagList .listRoleWeb p{
+    font-size: 12px;
+    padding: 0 5px;
+    border-left: 1px solid gray;
+    display: inline-block;
+    color: #0d6efd !important;
+}
+.userManage .tagList .listRoleWeb p span{
+    color: black;
+}
