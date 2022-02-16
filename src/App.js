@@ -11,6 +11,11 @@ import AnimeDetail from './site/site_web/Component/Page/AnimeDetail';
 import Archive from './site/site_web/Component/Page/Archive';
 import Search from './site/site_web/Component/Page/Search';
 import AdminLayout from './site/site_admin/AdminLayout';
+import MediaModal from './site/site_admin/Component/Media/MediaModal';
+import TagManage from './site/site_admin/Component/Tag/TagManage';
+import TermManage from './site/site_admin/Component/Term/TermManage';
+import UserManage from './site/site_admin/Component/User/UserManage';
+import UserNewEdit from './site/site_admin/Component/User/UserNewEdit';
 
 function App() {
   return (
@@ -29,7 +34,37 @@ function App() {
           <Route path='search/:q' element={<Search />} />
         </Route>
 
-        <Route path='admin' element={<AdminLayout/>}/>
+        <Route path='admin' element={<AdminLayout/>}> 
+          <Route index element={'dashboard'} />
+        
+          <Route path='pages' element={'all pages'} />
+          <Route path='page_new' element={'new page'} />
+
+          <Route path='posts' element={'all posts'} />
+          <Route path='post_new' element={'new posts'} />
+
+          <Route path='tags' element={<TagManage />}/>
+          <Route path='tag_new' element={'new tag'} />
+
+          <Route path='categories' element={<TermManage />} />
+          <Route path='term_new' element={'new term'} />
+
+          <Route path='animes' element={'all animes'} />
+          <Route path='anime_new' element={'new anime'} />
+
+          <Route path='characters'element={'all characters'} />
+          <Route path='character_new' element={'new character'} />
+
+          <Route path='comments' element={'all comments'} />
+          <Route path='comment_new' element={'new comment'} />
+
+          <Route path='medias' element={<MediaModal/>} />
+
+          <Route path='Users' element={<UserManage />} />
+          <Route path='user_new' element={<UserNewEdit />} />
+
+          <Route path='settings' element={'all settings'} />
+        </Route>
       </Routes>
     </BrowserRouter>
     </>

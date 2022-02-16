@@ -2,27 +2,31 @@ import instance, { auth_bearer } from '../default_api';
 
 const baseUrl = 'term/';
 
-export async const getTerm = (id) =>{
-    return await instance.get(baseUrl+id);
+export const getTerm = (id) => {
+    return instance.get(baseUrl + id);
 }
 
-export async const getTerms = (page) =>{
-    return await instance.get(baseUrl+page);
+export const getTerms = (page, size) => {
+    return instance.get(baseUrl + '?page=' + page + '&size=' + size+'&sort=id,desc');
 }
 
-export async const addTerm = (body) =>{
-    return await instance.post(baseUrl, body, auth_bearer);
+export const addTerm = (body) => {
+    return instance.post(baseUrl, body, auth_bearer);
 }
 
-export async const updateTerm = (body) =>{
-    return await instance.patch(baseUrl, body, auth_bearer);
+export const updateTerm = (body) => {
+    return instance.patch(baseUrl+body.id, body, auth_bearer);
 }
 
-export async const deleteTerm = (id) =>{
-    return await instance.delete(baseUrl+id);
+export const deleteTerm = (id) => {
+    return instance.delete(baseUrl + id);
 }
 
-export async const searchTerms = (query, page) =>{
-    // return await instance.get(id);
+export const deleteTerms = (ids) => {
+    return instance.post(baseUrl + 'delete/batch', ids, auth_bearer);
+}
+
+export const searchTerms = (query, page) => {
+    // return  instance.get(id);
     return null;
 }
