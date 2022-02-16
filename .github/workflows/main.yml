@@ -11,3 +11,5 @@ jobs:
 
       - name: Run a one-line script
         run: echo "Hello, world!"
+      - name: Create Test folder
+        run: mkdir Test 
