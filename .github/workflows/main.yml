@@ -15,5 +15,5 @@ jobs:
       - name: move to home folder
         run: cd /home/animyrju
 
-      - name: Create Test folder
-        run: mkdir Test 
+      - name: list home folder
+        run: ls 
