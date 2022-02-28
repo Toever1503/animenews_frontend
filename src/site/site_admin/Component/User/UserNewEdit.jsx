@@ -1,7 +1,7 @@
 import { Form, Input, Button, Radio } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addUser, updateUser } from '../../../../axios/common_api/user_api';
+import { getUser, addUser, updateUser } from '../../../../axios/common_api/user_api';
 import { getAuthorities } from '../../../../axios/common_api/authority_api';
 
 export default function UserNewEdit() {
@@ -11,7 +11,6 @@ export default function UserNewEdit() {
     const [form] = Form.useForm();
     const [errorMessage, setErrorMessage] = useState(null);
     const [typeForm, setTypeForm] = useState(query.get('type') === 'edit' ? 'edit' : 'new');
-    const [user, setUser] = useState(null);
     const [roles, setRoles] = useState([]);
 
     const clearForm = () => {
@@ -22,10 +21,10 @@ export default function UserNewEdit() {
 
 
     const onSubmit = (body) => {
+        body.userRoles = [roles.find(role => role.id === body.userRoles)]; // will change dto later
         console.log(body);
         if (typeForm === 'new') {
             body.userStatus = 0;
-            body.userRoles = [roles.find(role => role.id === body.userRoles)]; // will change dto later
 
             addUser(body).then(res => {
                 console.log(res);
@@ -38,6 +37,7 @@ export default function UserNewEdit() {
                 }
             }).catch(err => setErrorMessage('Server got error: code 505'));
         } else {
+            console.log('edit');
             updateUser(body).then(res => {
                 if (res.status === 200) {
                     setErrorMessage('Update user successfully!');
@@ -62,10 +62,17 @@ export default function UserNewEdit() {
 
         if (typeForm === 'edit') {
             const userId = query.get('userId');
-            form.setFieldsValue({
-                // userLogin: 'admin',
-                // userEmail: ''});
-            });
+            getUser(userId).then(res => {
+                const { data } = res;
+                form.setFieldsValue({
+                    id: data.id,
+                    userLogin: data.userLogin,
+                    displayName: data.displayName,
+                    userEmail: data.userEmail,
+                    userRoles: data.userRoles[0].id,
+                });
+            }).catch(err => console.log(err));
+            
         }// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -81,7 +88,7 @@ export default function UserNewEdit() {
                         form={form}
                     >
                         <h3 className="title">{typeForm === 'new' ? 'Add' : 'Edit'} User</h3>
-                        <Form.Item hidden={true} initialValue={null}
+                        <Form.Item hidden={true} initialValue={null} 
                             name='id'>
                             <Input />
                         </Form.Item>
@@ -119,9 +126,9 @@ export default function UserNewEdit() {
                             label="Website"
                             name="userUrl"
                         >
-                            <Input />
+                            <Input/>
                         </Form.Item>
-                        <Form.Item
+                        <Form.Item 
                             rules={[
                                 {
                                     required: true,
@@ -130,7 +137,7 @@ export default function UserNewEdit() {
                             label="Password"
                             name="userPass"
                         >
-                            <Input />
+                            <Input type="password" />
                         </Form.Item>
 
                         <Form.Item name="userRoles" label="Roles:"
@@ -139,7 +146,7 @@ export default function UserNewEdit() {
                                     required: true,
                                 },
                             ]}>
-                            <Radio.Group value={user === null ? null : user.userRoles[0].authorityLevel}>
+                            <Radio.Group value={0}>
                                 {roles.map(role =>
                                     <Radio value={role.id} key={role.authorityLevel}>{role.authorityName}</Radio>
                                 )}

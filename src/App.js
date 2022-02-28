@@ -16,57 +16,63 @@ import TagManage from './site/site_admin/Component/Tag/TagManage';
 import TermManage from './site/site_admin/Component/Term/TermManage';
 import UserManage from './site/site_admin/Component/User/UserManage';
 import UserNewEdit from './site/site_admin/Component/User/UserNewEdit';
+import PostManage from './site/site_admin/Component/Post/PostManage';
+import PostAddEdit from './site/site_admin/Component/Post/PostAddEdit';
+import { Provider } from 'react-redux';
+import store from './store/store';
 
 function App() {
   return (
     <>
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<SiteLayout />}>
-          <Route index element={<Home />} />
-          <Route path='anime_trending' element={<AnimeList/>}/>
-          <Route path='sinh_nhat_nhan_vat_anime' element={<CharacterBirthday /> }/>
-          <Route path='sinh_nhat_nhan_vat_anime/:month' element={<CharacterBirthday /> }/>
-          <Route path='character/:character_name/:id' element={<CharacterDetail />}/>
-          <Route path='anime/:anime_name/:id' element={<AnimeDetail />}/>
-          <Route path='/:category' element={<Categoryzz/>} />
-          <Route path='archive/:year/:month/:day' element={<Archive/>} />
-          <Route path='search/:q' element={<Search />} />
-        </Route>
+      <Provider store={store}>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<SiteLayout />}>
+              <Route index element={<Home />} />
+              <Route path='anime_trending' element={<AnimeList />} />
+              <Route path='sinh_nhat_nhan_vat_anime' element={<CharacterBirthday />} />
+              <Route path='sinh_nhat_nhan_vat_anime/:month' element={<CharacterBirthday />} />
+              <Route path='character/:character_name/:id' element={<CharacterDetail />} />
+              <Route path='anime/:anime_name/:id' element={<AnimeDetail />} />
+              <Route path='/:category' element={<Categoryzz />} />
+              <Route path='archive/:year/:month/:day' element={<Archive />} />
+              <Route path='search/:q' element={<Search />} />
+            </Route>
 
-        <Route path='admin' element={<AdminLayout/>}> 
-          <Route index element={'dashboard'} />
-        
-          <Route path='pages' element={'all pages'} />
-          <Route path='page_new' element={'new page'} />
+            <Route path='admin' element={<AdminLayout />}>
+              <Route index element={'dashboard'} />
 
-          <Route path='posts' element={'all posts'} />
-          <Route path='post_new' element={'new posts'} />
+              <Route path='pages' element={'all pages'} />
+              <Route path='page_new' element={'new page'} />
 
-          <Route path='tags' element={<TagManage />}/>
-          <Route path='tag_new' element={'new tag'} />
+              <Route path='posts' element={<PostManage />} />
+              <Route path='post_new' element={<PostAddEdit />} />
 
-          <Route path='categories' element={<TermManage />} />
-          <Route path='term_new' element={'new term'} />
+              <Route path='tags' element={<TagManage />} />
+              <Route path='tag_new' element={'new tag'} />
 
-          <Route path='animes' element={'all animes'} />
-          <Route path='anime_new' element={'new anime'} />
+              <Route path='categories' element={<TermManage />} />
+              <Route path='term_new' element={'new term'} />
 
-          <Route path='characters'element={'all characters'} />
-          <Route path='character_new' element={'new character'} />
+              <Route path='animes' element={'all animes'} />
+              <Route path='anime_new' element={'new anime'} />
 
-          <Route path='comments' element={'all comments'} />
-          <Route path='comment_new' element={'new comment'} />
+              <Route path='characters' element={'all characters'} />
+              <Route path='character_new' element={'new character'} />
 
-          <Route path='medias' element={<MediaModal/>} />
+              <Route path='comments' element={'all comments'} />
+              <Route path='comment_new' element={'new comment'} />
 
-          <Route path='Users' element={<UserManage />} />
-          <Route path='user_new' element={<UserNewEdit />} />
+              <Route path='medias' element={<MediaModal />} />
 
-          <Route path='settings' element={'all settings'} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+              <Route path='Users' element={<UserManage />} />
+              <Route path='user_new' element={<UserNewEdit />} />
+
+              <Route path='settings' element={'all settings'} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </Provider>
     </>
   );
 }

@@ -34,3 +34,6 @@
 table tbody td:nth-child(2):hover .itemAction{
     visibility: visible;
 }
+.ant-select{
+    margin: 0 10px;
+}

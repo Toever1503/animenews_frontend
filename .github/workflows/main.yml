@@ -17,3 +17,6 @@ jobs:
 
       - name: list home folder
         run: ls 
+
+#note: current run command is runner of repo, mean animenewsfrontend, 
+#test again: install npm, start

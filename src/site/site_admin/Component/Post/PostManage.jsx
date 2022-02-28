@@ -1,21 +1,28 @@
-import { PageHeader, Input, Button, Select, Table, Modal, notification } from 'antd';
+import { PageHeader, Input, Button, Select, Table, Modal, notification, Badge, Avatar, Tag } from 'antd';
 import { useEffect, useState } from "react";
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { deleteUsers, deleteUser, getUsers } from '../../../../axios/common_api/user_api';
+import { deletePosts, deletePost, getPosts } from '../../../../axios/common_api/post_api';
 import { useNavigate } from 'react-router';
+import { getTerms } from '../../../../axios/common_api/term_api';
 
-export default function UserManage() {
-
+export default function PostManage() {
+    const query = new URLSearchParams(window.location.search);
     const navigate = new useNavigate();
+
     const { Search } = Input;
     const { Option } = Select;
     const [rowsSelected, setRowsSelected] = useState([]);
     const [currentBulkAct, setCurrentBulkAct] = useState('');
+    const [termList, setTermList] = useState([]);
+    console.log(termList);
+
+
+    const termFilter = query.get('category');
 
     const columns = [
         {
-            title: 'Username',
-            dataIndex: 'userLogin',
+            title: 'Title',
+            dataIndex: 'postTitle',
             render: (txt, row) => (<>{txt}
                 <div className="itemAction d-flex">
                     <span onClick={() => onEdit(row)}>Edit</span>
@@ -23,51 +30,59 @@ export default function UserManage() {
                     <span>View</span>
                 </div>
             </>),
-            key: 'userLogin',
-            sorter: (a, b) => a.userLogin.length - b.userLogin.length,
+            key: 'postTitle',
+            width: '600px',
+            sorter: (a, b) => a.postTitle.length - b.postTitle.length,
         },
         {
-            title: 'Name',
-            dataIndex: 'displayName',
-            key: 'displayName',
-            sorter: (a, b) => a.displayName.length - b.displayName.length,
+            title: 'Categories',
+            dataIndex: 'postTerms',
+            key: 'postTerms',
+            render: (txt) => txt != null && (<>
+                {txt.map((item) => (<Tag style={{ margin: '4px' }} key={item.id}>{item.name}</Tag>))}
+            </>),
+            sorter: (a, b) => a.postTerms.length - b.postTerms.length,
         },
         {
-            title: 'Email',
-            dataIndex: 'userEmail',
-            key: 'userEmail',
-            sorter: (a, b) => a.userEmail.length - b.userEmail.length,
+            title: 'Tags',
+            dataIndex: 'postTags',
+            key: 'postTags',
+            render: (txt) => txt != null && (<>
+                {txt.map((item) => (<Tag style={{ margin: '4px' }} key={item.id}>{item.name}</Tag>))}
+            </>),
+            sorter: (a, b) => a.postTags.length - b.postTags.length,
         },
         {
-            title: 'Role',
-            dataIndex: 'userRoles',
-            key: 'userRoles',
-            sorter: (a, b) => a.userRoles.length - b.userRoles.length,
-            render: (txt) => txt !== null && (<>{txt.map(item => item.authorityName).join(', ')}</>)
+            title: 'Comments',
+            dataIndex: 'commentCount',
+            key: 'commentCount',
+            render: (txt) => txt !== 0 ? (<><Badge size="small" count={txt} overflowCount={5}>
+                <Avatar shape="square" size="small" />
+            </Badge></>) : '-',
+            sorter: (a, b) => a.commentCount - b.commentCount,
         },
         {
-            title: 'Status',
-            dataIndex: 'userStatus',
-            key: 'userStatus',
-            render: (txt) => (<>{txt === 0 ? 'Active' : 'Block'}</>),
-            sorter: (a, b) => a.userStatus - b.userStatus,
+            title: 'Author',
+            dataIndex: 'postAuthor',
+            key: 'postAuthor',
+            sorter: (a, b) => a.postAuthor.length - b.postAuthor.length,
         }
         ,
         {
-            title: 'Registered Date',
-            dataIndex: 'userRegistered',
-            key: 'userRegistered',
+            title: 'Date',
+            dataIndex: 'postDate',
+            key: 'postDate',
             sorter: (a, b) => {
-                return new Date(a.userRegistered).getTime() - new Date(b.userRegistered).getTime();
+                return new Date(a.postDate).getTime() - new Date(b.postDate).getTime();
             },
         }
     ];
     const onEdit = (row) => {
-        navigate("/admin/user_new?type=edit&userId=" + row.id);
+        navigate("/admin/post_new?type=edit&postId=" + row.id);
     }
     const onDelete = (row) => {
         showModalConfirm(() => {
-            deleteUser(row.id).then(res => {
+            deletePost(row.id).then(res => {
                 if (res.status === 200 && res.data === true) {
                     fetchData(content.pagination.current, content.pagination.pageSize);
                     openNotification('success', 'Delete successfully!');
@@ -77,7 +92,7 @@ export default function UserManage() {
             }).catch(err => console.log(err))
         });
     }
-    
+
     const onSearch = (q) => { }
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
@@ -97,11 +112,19 @@ export default function UserManage() {
             deleteBulk();
     }
 
+    const onChangeDate = (e) => { }
+    const onChangeCategory = (e) => {
+        navigate('/admin/posts?category=' + e);
+        console.log('catergory')
+        console.log(e)
+    }
+
+
     const deleteBulk = () => {
         console.log(rowsSelected);
         if (rowsSelected.length > 0)
             showModalConfirm(() => {
-                deleteUsers(rowsSelected).then(res => {
+                deletePosts(rowsSelected).then(res => {
                     if (res.status === 200 && res.data === true) {
                         fetchData(content.pagination.current, content.pagination.pageSize);
                         setRowsSelected([]);
@@ -149,9 +172,9 @@ export default function UserManage() {
         loading: false,
     });
 
-    const fetchData = (page, size) => {
+    const fetchData = ( termId, page, size) => {
         setContent({ loading: true });
-        getUsers(page - 1, size)
+        getPosts(termId, page - 1, size)
             .then(res => {
                 const { data } = res;
                 console.log(data)
@@ -170,25 +193,38 @@ export default function UserManage() {
     };
 
     useEffect(() => {
-        fetchData(content.pagination.current, content.pagination.pageSize);
+        const termId = termFilter === '' ? 0 : termList.length > 0 ? termList.find(term => term.name === termFilter).id : 0;
+        getTerms( 0, 1001).then(res => {
+            console.log(res)
+            if (res.status === 200) {
+                setTermList(res.data.content);
+            }
+            else
+                openNotification('error', 'Get Terms failed. Code: ' + res.status);
+        }).catch(err => console.log(err));
+        fetchData(termId, 1, content.pagination.pageSize);
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [termFilter]);
 
     return (
         <>
             <div className="userManage">
                 <div className="titleManage d-flex">
-                    <PageHeader title="User Management" style={{ padding: '16px' }} />
+                    <PageHeader title="Posts" style={{ padding: '16px' }} />
                     <div className="newTag" style={{ padding: '20px' }}>
-                        <Button type="primary" onClick={() => navigate('/admin/user_new?type=new')}>New User</Button>
+                        <Button type="primary" onClick={() => navigate('/admin/post_new?type=new')}>New</Button>
                     </div>
                 </div>
 
                 <div className="tagList">
                     <div className="listRoleWeb">
                         <p style={{ borderLeft: 'unset' }}>All <span>(24)</span></p>
-                        <p>Admin <span>(4)</span></p>
-                        <p>User <span>(5)</span></p>
+                        <p>Mine <span>(4)</span></p>
+                        <p>Pubnished <span>(5)</span></p>
+                        <p>Sticky <span>(5)</span></p>
+                        <p>Draft <span>(5)</span></p>
+                        <p>Trashed <span>(5)</span></p>
                     </div>
 
                     <div className="tagAction">
@@ -199,6 +235,17 @@ export default function UserManage() {
                                     <Option value='delete'>Delete</Option>
                                 </Select>
                                 <Button onClick={onClickBulk} type='primary'>Apply</Button>
+
+                                <Select onChange={onChangeDate} defaultValue={''} className="select-after">
+                                    <Option value=''>All Dates</Option>
+                                    <Option value='delete'>Delete</Option>
+                                </Select>
+
+                                <Select onChange={onChangeCategory} defaultValue={''} className="select-after">
+                                    <Option value=''>All Categories</Option>
+                                    {termList.length !== 0 && termList.map((item) => (
+                                        <Option value={item.name} key={item.id}>{item.name}</Option>))}
+                                </Select>
                             </div>
                             <div className="search">
                                 <Search style={{ width: 300, float: 'right' }}

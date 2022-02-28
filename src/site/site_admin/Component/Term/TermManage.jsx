@@ -14,6 +14,7 @@ export default function TermManage() {
     const [form] = Form.useForm();
     const [errorMessage, setErrorMessage] = useState(null);
 
+
     const pageIndexChange = (page, pageSize) => {
         fetchData(page, pageSize);
     }
@@ -184,7 +185,8 @@ export default function TermManage() {
 
     const fetchData = (page, size) => {
         setContent({ loading: true });
-        getTerms(page-1, size)
+
+        getTerms(page - 1, size)
             .then(res => {
                 const { data } = res;
                 console.log(data)
@@ -203,7 +205,7 @@ export default function TermManage() {
     };
 
     useEffect(() => {
-        fetchData(content.pagination.current, content.pagination.pageSize);
+        fetchData(1, content.pagination.pageSize);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

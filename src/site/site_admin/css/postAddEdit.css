@@ -1,0 +1,12 @@
+.postAddEdit .postPublishAction .postStatus{
+    font-size: 13px;
+}
+.postAddEdit .postPublishAction .changePostStatus>div{
+    display: inline-block;
+    font-size: 12px;
+}
+.postAddEdit .formPostRight>div{
+    border: 1px solid gainsboro;
+    margin: 10px 0;
+    padding: 5px;
+}
