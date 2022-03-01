@@ -1,16 +1,18 @@
 import { useEffect, useState, useRef } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { PageHeader, Input, Select, Button, Checkbox, Row, Col } from 'antd';
+import { PageHeader, Input, Select, Button, Checkbox, Row, Col, notification } from 'antd';
 import JoditEditor from 'jodit-pro-react';
 import '../../../site_admin/css/postAddEdit.css';
+import DebounceSelect from '../../../component/DebounceSelect';
+import { searchTags } from '../../../../axios/common_api/tag_api';
 
 export default function PostAddEdit() {
 
     const navigate = new useNavigate();
     const query = new URLSearchParams(window.location.search);
 
-    const [typeForm, setTypeForm] = useState(query.get('type') === 'edit' ? 'edit' : 'new');
+    const typeForm = query.get('type') === 'edit' ? 'edit' : 'new';
 
     const { TextArea } = Input;
     const { Option } = Select;
@@ -23,6 +25,89 @@ export default function PostAddEdit() {
         readonly: false // all options from https://xdsoft.net/jodit/doc/
     }
     // end for jodit
+
+    //begin edit post status
+    const [editPostStatus, setEditPostStatus] = useState(false);
+    const onClickEditPostStatus = () => {
+        setEditPostStatus(true);
+    }
+    const onOkEditPostStatus = () => {
+        setEditPostStatus(false);
+    }
+    const onCancelEditPostStatus = () => {
+        setEditPostStatus(false);
+    }
+    const onChangePostStatus = (e) => { }
+    // end edit post status
+
+    // begin for category
+    const [categoryList, setCategoryList] = useState([
+        {
+            id: 1,
+            name: 'category 1',
+            slug: 'category-1',
+        },
+        {
+            id: 2,
+            name: 'category 2',
+            slug: 'category-2',
+        },
+        {
+            id: 3,
+            name: 'category 3',
+            slug: 'category-3',
+        },
+    ]);
+    const [postCategory, setPostCategory] = useState([
+        'category-3'
+    ]);
+    const [mainCategory, setMainCategory] = useState('');
+
+    const onChangeCategory = (cats) => {
+        setPostCategory(cats);
+    }
+    const onChooseMainCategory = (cat) => {
+        setMainCategory(cat);
+    }
+    // end for category
+
+    //begin for tag
+    const [tagOpts, setTagOpts] = useState([
+        {
+            key: 't-1',
+            label: 'Tag 1',
+            value: 'tag1'
+        }
+    ]);
+
+    const fetchTagSuggestions = async (value) => {
+        return searchTags(value, 0, 5).then(body => body.data.content.map(tag => ({
+            key: 't-' + tag.id,
+            label: tag.name,
+            value: tag.slug
+        })));
+    };
+    //end for tag
+
+    // save post
+    const onSavePost = () => {
+        console.log('saving post...');
+        if (postCategory.length >= 2 && mainCategory === '') {
+            openNotification('warn', 'Please select main category');
+            return;
+        }
+    }
+    // end save post
+
+    const openNotification = (type, message) => {
+        notification[type]({
+            message: message,
+        });
+    }
+
+    useEffect(() => {
+
+    }, [])
 
     return (
         <>
@@ -55,45 +140,45 @@ export default function PostAddEdit() {
                             <hr />
                             <div className="postStatus row">
                                 <p className='col-6'>Status: <span>Draft</span></p>
-                                <p className='col-6' style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}>Edit</p>
-                                <div className="changePostStatus mb-2 d-none">
+                                <p className='col-6' style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue', display: editPostStatus === true ? 'none' : '' }} onClick={onClickEditPostStatus}>Edit</p>
+                                <div className="changePostStatus mb-2" style={{ display: editPostStatus === false ? 'none' : 'block' }}>
                                     <Select className='m-0' defaultValue="draft">
                                         <Option value="lucy">Lucy</Option>
                                     </Select>
-                                    <div className="btn btn-outline-primary p-1" style={{ margin: '0 2px' }}>Ok</div>
-                                    <div className="btn btn-outline-primary p-1">Cancel</div>
+                                    <div className="btn btn-outline-primary p-1" style={{ margin: '0 2px' }} onClick={onOkEditPostStatus}>Ok</div>
+                                    <div className="btn btn-outline-primary p-1" onClick={onCancelEditPostStatus}>Cancel</div>
                                 </div>
                             </div>
                             <div className="publishAction">
                                 <Button>Save draft</Button>
-                                <Button style={{ float: 'right' }}>Publish</Button>
+                                <Button style={{ float: 'right' }} onClick={onSavePost}>Publish</Button>
                             </div>
                         </div>
                         {/* end publish action */}
+
+                        <div className="addtionalPostPlugin">
+                            <Button type="primary" size='small'>Images</Button>
+                            <Button type="primary" size='small'>Emmbed</Button>
+                        </div>
 
                         {/* begin category action */}
                         <div className="categoryAction">
                             <b>Category</b>
                             <hr />
-                            <Checkbox.Group style={{ width: '100%' }}>
+                            <Checkbox.Group style={{ width: '100%' }} defaultValue={postCategory} onChange={onChangeCategory}>
                                 <Row>
-                                    <Col span={8}>
-                                        <Checkbox value="D">Default</Checkbox>
-                                    </Col>
-                                    <Col span={8}>
-                                        <Checkbox value="A">News</Checkbox>
-                                    </Col>
-                                    <Col span={8}>
-                                        <Checkbox value="B">Manga</Checkbox>
-                                    </Col>
-                                    <Col span={8}>
-                                        <Checkbox value="C">Game</Checkbox>
-                                    </Col>
+                                    {
+                                        categoryList.map(cat => (
+                                            <Col key={'c-' + cat.id}>
+                                                <Checkbox value={cat.slug}>{cat.name}</Checkbox>
+                                            </Col>
+                                        ))
+                                    }
                                 </Row>
                             </Checkbox.Group>
-                            <div className="mainCategory d-none">
+                            <div className="mainCategory" style={{ display: postCategory.length >= 2 ? 'block' : 'none' }}>
                                 <hr />
-                                <Select className='m-0' defaultValue="News">
+                                <Select className='m-0' defaultValue={mainCategory} onChange={onChooseMainCategory}>
                                     <Option value="Default">Default</Option>
                                     <Option value="News">News</Option>
                                     <Option value="Manga">Manga</Option>
@@ -106,9 +191,11 @@ export default function PostAddEdit() {
 
                         {/* begin tags action */}
                         <div className="tagAction">
-                            <Select className='m-0' mode="tags" style={{ width: '100%' }} placeholder="Enter Tags... " allowClear='true' loading='true'>
-                            </Select>
-                            {/* need choose tag remote if exist */}
+                            <b>Tag</b>
+                            <hr />
+                            <DebounceSelect className='m-0' defaultValue={tagOpts} mode="tags" style={{ width: '100%' }} onChange={(newValue) => {
+                                setTagOpts(newValue);
+                            }} loading={true} fetchOptions={fetchTagSuggestions} placeholder="Enter Tags... " />
                         </div>
                         {/* end tags action */}
                     </div>
