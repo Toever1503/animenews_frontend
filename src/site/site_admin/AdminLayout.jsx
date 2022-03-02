@@ -16,6 +16,7 @@ import { Outlet } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import React, { useEffect, useState } from 'react';
 import './css/adminStyle.css';
+import MediaLibrary from './Component/Media/MediaLibrary.jsx';
 
 export default function AdminLayout() {
     // let metaAuth = document.querySelector('meta[name="authorization"]');
@@ -46,7 +47,7 @@ export default function AdminLayout() {
                 <span className='text-white'>header</span>
             </Header>
 
-            <div className='adminContent d-flex' style={{ minHeight: '500px' }}>
+            <div className='adminContent d-flex' style={{ minHeight: '800px' }}>
                 <aside>
                     <Button type="primary" onClick={toggleCollapsed} style={{ display: collapsed ? 'block' : 'none' }}>
                         {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined)}
@@ -102,6 +103,7 @@ export default function AdminLayout() {
                     <Outlet />
                 </Content>
             </div>
+            <MediaLibrary />
 
             <Footer >
                 footer
