@@ -31,3 +31,7 @@ jobs:
 
       - name: check current node
         run: node -v
+      - name: list
+        run: ls
+      - name: install node
+        run: npm intsall
