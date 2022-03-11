@@ -7,7 +7,7 @@ export const getTag = (id) => {
 }
 
 export const getTags = (page, size) => {
-    return instance.get(baseUrl + '?page=' + page + '&size=' + size+'&sort=id,desc');
+    return instance.get(baseUrl + '?page=' + page + '&size=' + size + '&sort=id,desc');
 }
 
 export const addTag = (body) => {
@@ -26,7 +26,7 @@ export const deleteTags = (ids) => {
     return instance.post(baseUrl + 'delete/batch', ids, auth_bearer);
 }
 
-export const searchTags = (query, page) => {
+export const searchTags = (q, page, size) => {
     // return  instance.get(id);
-    return null;
+    return instance.get(baseUrl + 'search?q=' + q + '&page=' + page + '&size=' + size + '&sort=id,desc');
 }

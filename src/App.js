@@ -11,7 +11,7 @@ import AnimeDetail from './site/site_web/Component/Page/AnimeDetail';
 import Archive from './site/site_web/Component/Page/Archive';
 import Search from './site/site_web/Component/Page/Search';
 import AdminLayout from './site/site_admin/AdminLayout';
-import MediaModal from './site/site_admin/Component/Media/MediaModal';
+import MediaManage from './site/site_admin/Component/Media/MediaManage';
 import TagManage from './site/site_admin/Component/Tag/TagManage';
 import TermManage from './site/site_admin/Component/Term/TermManage';
 import UserManage from './site/site_admin/Component/User/UserManage';
@@ -63,7 +63,7 @@ function App() {
               <Route path='comments' element={'all comments'} />
               <Route path='comment_new' element={'new comment'} />
 
-              <Route path='medias' element={<MediaModal />} />
+              <Route path='medias' element={<MediaManage />} />
 
               <Route path='Users' element={<UserManage />} />
               <Route path='user_new' element={<UserNewEdit />} />
