@@ -6,9 +6,12 @@ import JoditEditor from 'jodit-pro-react';
 import '../../../site_admin/css/postAddEdit.css';
 import DebounceSelect from '../../../component/DebounceSelect';
 import { searchTags } from '../../../../axios/common_api/tag_api';
+import { useDispatch } from 'react-redux';
+import {openMediaLibrary} from '../../../../reducers/mediaLibraryReducer';
 
 export default function PostAddEdit() {
 
+    const dispatch = useDispatch();
     const navigate = new useNavigate();
     const query = new URLSearchParams(window.location.search);
 
@@ -105,6 +108,17 @@ export default function PostAddEdit() {
         });
     }
 
+    const showImageLibrary = () => {
+        dispatch(openMediaLibrary());
+    }
+
+    const emmbedTwitter = () => {
+        const code = prompt('Twitter Embed, paste link below');
+        alert(code)
+    }
+    
+
+
     useEffect(() => {
 
     }, [])
@@ -157,8 +171,8 @@ export default function PostAddEdit() {
                         {/* end publish action */}
 
                         <div className="addtionalPostPlugin">
-                            <Button type="primary" size='small'>Images</Button>
-                            <Button type="primary" size='small'>Emmbed</Button>
+                            <Button type="primary" size='small' onClick={showImageLibrary}>Images</Button>
+                            <Button type="primary" size='small' onClick={emmbedTwitter}>Emmbed</Button>
                         </div>
 
                         {/* begin category action */}

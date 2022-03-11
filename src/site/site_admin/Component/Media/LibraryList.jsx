@@ -1,30 +1,74 @@
 import { Popconfirm, message, Row, Col, Input, Select, Form, Button, Pagination, Skeleton, notification } from 'antd';
 import { useEffect, useState } from 'react';
-import { deleteImageByName, getImages, updateImage } from '../../../../axios/common_api/image_api';
+import { deleteImageByName, getImages, updateImage, getImageDates } from '../../../../axios/common_api/image_api';
 import { CopyOutlined } from '@ant-design/icons';
-
-// import 
+import { useSelector } from 'react-redux';
 
 export default function LibraryList() {
     const { Search } = Input;
     const { Option } = Select;
     const [form] = Form.useForm();
 
+    const autoFresh = useSelector(state=> state.mediaLibrary.open);
+
+    const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const [listImages, setListImages] = useState([]);
     const [activeSkeleton, setActiveSkeleton] = useState(false);
     const [imageDetail, setImageDetail] = useState(null);
     const [isUpdating, setIsUpdating] = useState(false);
+    const [messageErr, setMessageErr] = useState(null);
+    const [imageSearchKey, setimageSearchKey] = useState(null);
+    const [currentDate, setCurrentDate] = useState(null);
+    const [imageDates, setImageDates] = useState([]);
     const [pagination, setPagination] = useState({
         current: 1,
         total: 0
     });
 
     const onSearchImage = keyword => {
-        console.log(keyword);
+        setImageDetail(null);
+        setimageSearchKey(keyword);
+        setActiveSkeleton(true);
+        getImages(keyword, currentDate, 0)
+            .then(res => {
+                const { data } = res;
+                setListImages(data.content);
+                setPagination({
+                    current: data.pageable.pageNumber + 1,
+                    total: data.totalElements
+                })
+                if (data.totalElements === 0)
+                    setMessageErr('No result found');
+                setActiveSkeleton(false);
+            }).catch(err => {
+                setListImages([]);
+                notification('error', 'Server Error, code: 500');
+                console.log(err);
+            });
     }
 
     const onChangePage = page => {
-        console.log(page);
+        setImageDetail(null);
+        getImages(imageSearchKey, currentDate, page)
+            .then(res => {
+                const { data } = res;
+                setListImages(data.content);
+                setPagination({
+                    current: data.pageable.pageNumber + 1,
+                    total: data.totalElements
+                });
+                if (data.totalElements === 0)
+                    setMessageErr('No result found');
+                setActiveSkeleton(false);
+            }).catch(err => {
+                setListImages([]);
+                notification('error', 'Server Error, code: 500');
+                console.log(err);
+            });
+    }
+
+    const onChangeDate = date => {
+        setCurrentDate(date);
     }
 
     const openNotification = (type, message) => {
@@ -73,6 +117,7 @@ export default function LibraryList() {
     const onDeleteImage = (imgName) => {
         deleteImageByName(imgName).then(res => {
             if (res.status === 200 && res.data === true) {
+                setImageDetail(null);
                 openNotification('success', 'Delete image successfully');
                 setListImages(listImages.filter(img => img.id !== imgName));
             }
@@ -85,32 +130,35 @@ export default function LibraryList() {
 
     const copyImageUrl = (url) => {
         window.navigator.clipboard.writeText(url);
-        message.success('Copied to clipboard', 0.5);
+        message.success('Copied to clipboard', 1);
     }
 
     useEffect(() => {
+        setCurrentDate(null);
+        setimageSearchKey(null);
+        setListImages([]);
+        setImageDetail(null);
         setActiveSkeleton(true);
-        getImages(0).then(res => {
+
+        getImages('', '', 0).then(res => {
             const { data } = res;
-            console.log(data)
-            if (res.status === 200) {
-                setActiveSkeleton(false);
-                setListImages(data.content);
-                setPagination({
-                    current: data.pageable.pageNumber + 1,
-                    total: data.totalElements
-                })
-            }
-            else {
-                setActiveSkeleton(false);
-                openNotification('error', 'Cannot get images, code: 500');
-            }
+            setListImages(data.content);
+            setPagination({
+                current: data.pageable.pageNumber + 1,
+                total: data.totalElements
+            })
+            setActiveSkeleton(false);
         }).catch(err => {
             console.log(err);
             setActiveSkeleton(false);
             openNotification('error', 'Cannot get images, code: 500');
-        })
-    }, []);
+        });
+        getImageDates()
+            .then(res => {
+                setImageDates(res.data);
+            }).catch(err => console.log(err));
+        
+    }, [autoFresh]);
 
     return (
         <>
@@ -121,11 +169,15 @@ export default function LibraryList() {
                             <p style={{ margin: '2px' }}><b>Filter</b></p>
                             <Select className='m-0' defaultValue="">
                                 <Option value="">All media items</Option>
-                                <Option value="jack">Jack</Option>
-                                <Option value="lucy">Lucy</Option>
                             </Select>
-                            <Select className='mt-1' defaultValue="">
+                            <Select className='mt-1' defaultValue="" onChange={onChangeDate}>
                                 <Option value="">All dates</Option>
+                                {
+                                    imageDates.map(date => {
+                                        const d = new Date(date);
+                                        return <Option key={date} value={date}>{month[d.getMonth()] + ' ' + d.getFullYear()}</Option>;
+                                    })
+                                }
                             </Select>
                         </div>
                         <div className="libraryImagesLeftTitleSearch col-4">
@@ -138,6 +190,11 @@ export default function LibraryList() {
                         </div>
                     </div>
                     <Skeleton paragraph={{ rows: 10 }} loading={activeSkeleton} active />
+                    {
+                        messageErr !== null && (
+                            <p className='text-center'>{messageErr}!</p>
+                        )
+                    }
                     {listImages.length !== 0 && (
                         <Row className='p-1' style={{ paddingLeft: '10px !important', background: 'rgb(245 242 242 / 69%)', overflowY: 'scroll', maxHeight: 500 }} gutter={[10, 10]}>
                             {listImages.map(img =>

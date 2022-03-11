@@ -2,15 +2,21 @@ import '../../css/MediaLibrary.css';
 import { Button, Tabs } from 'antd';
 import UploadFile from './UploadFile.jsx';
 import LibraryList from './LibraryList.jsx';
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {closeMediaLibrary} from '../../../../reducers/mediaLibraryReducer';
 export default function MediaLibrary() {
-    const [dislayMediaLibrary, setDislayMediaLibrary] = useState(true);
+    const [dislayMediaLibrary, setDislayMediaLibrary] = useState(false);
+    const activeMediaLibrary =   useSelector(state=> state.mediaLibrary.open);  
+    const dispatch = useDispatch();
 
-    const closeMediaLibrary = () => {
-        console.log('closeMediaLibrary');
-        setDislayMediaLibrary(false);
+    const closeLibrary = () => {
+        dispatch(closeMediaLibrary());
     }
+
+    useEffect(() => {
+        setDislayMediaLibrary(activeMediaLibrary);
+    },[activeMediaLibrary]);
 
     return (
         <>
@@ -19,7 +25,7 @@ export default function MediaLibrary() {
                     <div className='mediaLibrary_content_header'>
                         <div className='mediaLibrary_content_header_title'>
                             <h3>Add Media</h3>
-                            <Button onClick={closeMediaLibrary} type="primary" style={{ position: 'absolute', top: 2, right: 2 }}>X</Button>
+                            <Button onClick={closeLibrary} type="primary" style={{ position: 'absolute', top: 2, right: 2 }}>X</Button>
                         </div>
                     </div>
 

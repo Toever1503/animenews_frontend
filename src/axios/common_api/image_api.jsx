@@ -2,8 +2,12 @@ import instance, { auth_bearer } from '../default_api';
 
 const baseUrl = 'image/';
 
-export const getImages = (page) => {
-    return instance.get(baseUrl + '?page=' + page + '&sort=lastCreated,desc');
+export const getImages = (q, date, page) => {
+    return instance.get(baseUrl + '?q=' + q + '&date=' + date + '&page=' + page + '&sort=lastCreated,desc');
+}
+
+export const getImageDates = () => {
+    return instance.get(baseUrl + 'date');
 }
 
 export const addImage = (body) => {
@@ -18,7 +22,7 @@ export const deleteImageByName = (name) => {
     return instance.delete(baseUrl + name);
 }
 
-export const searchImages = (query, page) => {
-    // return await instance.get(id);
-    return null;
+
+export const searchImages = (q, page) => {
+    return instance.get(baseUrl + 'search?q=' + q + '&page=' + page + '&sort=lastCreated,desc');
 }

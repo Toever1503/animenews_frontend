@@ -1,14 +1,12 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
-import termReducer from '../reducers/termReducer';
+import mediaLibrary from "../reducers/mediaLibraryReducer";
 
 const store = configureStore({
     reducer:{
-        term: termReducer,
+        mediaLibrary: mediaLibrary
     },
     middleware: getDefaultMiddleware({
         serializableCheck: false
     })
 });
 export default store;
-
-
