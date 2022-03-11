@@ -1,13 +1,13 @@
 import { useEffect, useState, useRef } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { PageHeader, Input, Select, Button, Checkbox, Row, Col, notification } from 'antd';
+import { PageHeader, Input, Select, Button, Checkbox, Row, Col, notification, message } from 'antd';
 import JoditEditor from 'jodit-pro-react';
 import '../../../site_admin/css/postAddEdit.css';
 import DebounceSelect from '../../../component/DebounceSelect';
 import { searchTags } from '../../../../axios/common_api/tag_api';
 import { useDispatch } from 'react-redux';
-import {openMediaLibrary} from '../../../../reducers/mediaLibraryReducer';
+import { openMediaLibrary } from '../../../../reducers/mediaLibraryReducer';
 
 export default function PostAddEdit() {
 
@@ -114,9 +114,16 @@ export default function PostAddEdit() {
 
     const emmbedTwitter = () => {
         const code = prompt('Twitter Embed, paste link below');
-        alert(code)
+        fetch('https://publish.twitter.com/oembed?url=' + code.trim(), {
+            mode: 'no-cors',
+        })
+            .then(res => res.json())
+            .then(data => {
+                window.navigator.clipboard.writeText(data.html);
+                message.success('Copied to clipboard', 1);
+            }).catch(err => console.log(err));
     }
-    
+
 
 
     useEffect(() => {

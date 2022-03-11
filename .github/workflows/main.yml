@@ -11,11 +11,9 @@ jobs:
       - name: Run a one-line script
         run: echo "Hello, world!"
 
-      - uses: actions/checkout@v2
       - name: list home folder
         run: ls 
-        
-      - uses: actions/checkout@v2
+
       - name: check node
       - run: node -v
 
