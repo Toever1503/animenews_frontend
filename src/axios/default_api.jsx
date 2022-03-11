@@ -1,7 +1,7 @@
-import axios from "axios"; 'axios';
+import axios from "axios";
 
 const axiosConfig = {
-  baseURL: 'http://localhost:8000/api',
+  baseURL: 'http://localhost:8080/api',
   timeout: 5000,
   // headers: {'application/content-type': 'foobar'}
 };
@@ -26,9 +26,3 @@ export const auth_bearer = () => {
   };
 }
 
-export const getAuth = () => {
-  // let metaAuth = document.querySelector('meta[name="description"]');
-  // if (metaAuth == null) return null;
-  // else return metaAuth.content
-  return 'ok';
-}

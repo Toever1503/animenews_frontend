@@ -2,27 +2,31 @@ import instance, { auth_bearer } from '../default_api';
 
 const baseUrl = 'tag/';
 
-export async const getTag = (id) =>{
-    return await instance.get(baseUrl+id);
+export const getTag = (id) => {
+    return instance.get(baseUrl + id);
 }
 
-export async const getTags = (page) =>{
-    return await instance.get(baseUrl+page);
+export const getTags = (page, size) => {
+    return instance.get(baseUrl + '?page=' + page + '&size=' + size + '&sort=id,desc');
 }
 
-export async const addTag = (body) =>{
-    return await instance.post(baseUrl, body, auth_bearer);
+export const addTag = (body) => {
+    return instance.post(baseUrl, body, auth_bearer);
 }
 
-export async const updateTag = (body) =>{
-    return await instance.patch(baseUrl, body, auth_bearer);
+export const updateTag = (body) => {
+    return instance.patch(baseUrl + body.id, body, auth_bearer);
 }
 
-export async const deleteTag = (id) =>{
-    return await instance.delete(baseUrl+id);
+export const deleteTag = (id) => {
+    return instance.delete(baseUrl + id);
 }
 
-export async const searchTags = (query, page) =>{
-    // return await instance.get(id);
-    return null;
+export const deleteTags = (ids) => {
+    return instance.post(baseUrl + 'delete/batch', ids, auth_bearer);
+}
+
+export const searchTags = (q, page, size) => {
+    // return  instance.get(id);
+    return instance.get(baseUrl + 'search?q=' + q + '&page=' + page + '&size=' + size + '&sort=id,desc');
 }

@@ -1,0 +1,21 @@
+name: CI
+
+on: push
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run a one-line script
+        run: echo "Hello, world!"
+
+      - name: list home folder
+        run: ls 
+
+      - name: check node
+      - run: node -v
+
+#note: current run command is runner of repo, mean animenewsfrontend, 
+#test again: install npm, start
