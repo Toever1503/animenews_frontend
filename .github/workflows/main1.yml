@@ -33,5 +33,5 @@ jobs:
         run: node -v
       - name: list
         run: ls
-      - name: install node
+      - name: install node ok
         run: npm intsall
