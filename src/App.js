@@ -20,6 +20,7 @@ import PostManage from './site/site_admin/Component/Post/PostManage';
 import PostAddEdit from './site/site_admin/Component/Post/PostAddEdit';
 import { Provider } from 'react-redux';
 import store from './store/store';
+import React from 'react';
 
 function App() {
   return (
