@@ -3,7 +3,7 @@ import { PageHeader, Input, Select, Pagination } from 'antd';
 import BreadCrumb from '../../../component/BreadCrumb';
 import '../../css/search.css';
 import PostSumary from "../Post/PostSumary";
-
+import React from "react";
 export default function Search() {
     const breadCrumbRoutes = [{
         path: 'sinh_nhat_nhan_vat_anime',

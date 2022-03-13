@@ -1,7 +1,7 @@
 import { PageHeader, Pagination, Card } from 'antd';
 import BreadCrumb from '../../../component/BreadCrumb';
 import '../../css/anime.css';
-
+import React from 'react';
 export default function AnimeList() {
     const breadCrumbRoutes = [{
         path: 'anime_trending',

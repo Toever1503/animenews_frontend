@@ -1,5 +1,5 @@
 import '../../css/postBoxHorizontal.css';
-
+import React from 'react';
 export default function PostBoxHorizontal() {
 
     return (

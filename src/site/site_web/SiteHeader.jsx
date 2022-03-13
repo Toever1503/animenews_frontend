@@ -1,6 +1,6 @@
 import { Menu, Layout, Button, Input, Tag } from 'antd';
 import 'antd/dist/antd.min.css';
-import { useEffect, useState } from 'react';
+import React,{ useEffect, useState } from 'react';
 import './css/header.css';
 import {
     TwitterOutlined,

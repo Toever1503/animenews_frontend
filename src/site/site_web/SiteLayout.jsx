@@ -4,7 +4,7 @@ import SiteHeader from "./SiteHeader";
 import { Layout } from 'antd';
 import { Content } from "antd/lib/layout/layout";
 import './css/layout.css';
-
+import React from "react";
 export default function SiteLayout() {
     return (
         <>

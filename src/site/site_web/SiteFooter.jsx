@@ -8,7 +8,7 @@ import {
     DownOutlined
 } from '@ant-design/icons';
 import './css/footer.css';
-
+import React from 'react';
 export default function SiteFooter() {
     const { Footer } = Layout;
 

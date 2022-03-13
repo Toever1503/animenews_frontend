@@ -5,7 +5,7 @@ import PostBox from '../Post/PostBox';
 import BreadCrumb from '../../../component/BreadCrumb';
 import AnimeItem from '../Post/AnimeItem';
 import PostSumary from '../Post/PostSumary';
-
+import React from 'react';
 export default function Home() {
     return (
         <>

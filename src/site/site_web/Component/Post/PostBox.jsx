@@ -1,6 +1,6 @@
 import '../../css/postBox.css';
 import {ClockCircleOutlined} from '@ant-design/icons';
-
+import React from 'react';
 export default function PostBox() {
     return (
         <div className="postBox">

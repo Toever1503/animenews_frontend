@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { Card, PageHeader } from 'antd';
-import { useEffect } from 'react';
+import React,{ useEffect } from 'react';
 import BreadCrumb
     from "../../../component/BreadCrumb";
 import '../../css/anime.css';

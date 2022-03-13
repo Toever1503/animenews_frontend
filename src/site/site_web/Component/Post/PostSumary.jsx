@@ -1,5 +1,5 @@
 import '../../css/postSumary.css';
-
+import React from 'react';
 export default function PostSumary() {
     return (
         <>

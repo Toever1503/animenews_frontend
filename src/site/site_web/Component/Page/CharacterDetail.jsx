@@ -3,7 +3,7 @@ import { Card, PageHeader } from 'antd';
 import BreadCrumb
     from "../../../component/BreadCrumb";
 import '../../css/anime.css';
-
+import React from "react";
 export default function CharacterDetail() {
     const { id, character_name } = useParams();
     const { Meta } = Card;

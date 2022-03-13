@@ -1,5 +1,6 @@
 import { Upload, message } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
+import React from 'react';
 
 export default function PicturesWall() {
     const { Dragger } = Upload;

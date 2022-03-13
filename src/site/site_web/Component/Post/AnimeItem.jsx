@@ -1,7 +1,7 @@
 import '../../css/animeItem.css';
 import { HeartFilled } from '@ant-design/icons';
 import {Link} from 'react-router-dom';
-
+import React from 'react';
 export default function AnimeItem() {
     return (
         <>

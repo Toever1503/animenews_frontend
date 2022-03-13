@@ -2,7 +2,7 @@ import '../../css/MediaLibrary.css';
 import { Button, Tabs } from 'antd';
 import UploadFile from './UploadFile.jsx';
 import LibraryList from './LibraryList.jsx';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {closeMediaLibrary} from '../../../../reducers/mediaLibraryReducer';
 export default function MediaLibrary() {

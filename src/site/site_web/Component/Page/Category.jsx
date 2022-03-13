@@ -4,6 +4,7 @@ import PostBox from "../Post/PostBox";
 // import PostSumary from "../Post/PostSumary";
 import { PageHeader, Pagination } from 'antd';
 import '../../css/pageCategory.css';
+import React from "react";
 
 export default function Categoryzz() {
     const { category } = useParams();

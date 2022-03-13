@@ -1,5 +1,5 @@
 import { PageHeader, Input, Button, Select, Table, Modal, notification, Badge, Avatar, Tag } from 'antd';
-import { useEffect, useState } from "react";
+import React,{ useEffect, useState } from "react";
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { deletePosts, deletePost, getPosts } from '../../../../axios/common_api/post_api';
 import { useNavigate } from 'react-router';
