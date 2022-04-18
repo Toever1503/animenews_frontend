@@ -21,6 +21,10 @@ import PostAddEdit from './site/site_admin/Component/Post/PostAddEdit';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import React from 'react';
+import Signup from './site/component/Signup';
+import Signin from './site/component/Signin';
+import SinglePost from './site/site_web/Component/Post/SinglePost';
+import Logout from './site/component/Logout';
 
 function App() {
   return (
@@ -35,10 +39,16 @@ function App() {
               <Route path='sinh_nhat_nhan_vat_anime/:month' element={<CharacterBirthday />} />
               <Route path='character/:character_name/:id' element={<CharacterDetail />} />
               <Route path='anime/:anime_name/:id' element={<AnimeDetail />} />
-              <Route path='/:category' element={<Categoryzz />} />
               <Route path='archive/:year/:month/:day' element={<Archive />} />
+              <Route path='tag/:tagName' element={<Archive />} />
               <Route path='search/:q' element={<Search />} />
+              <Route path='/:category' element={<Categoryzz />} />
+              <Route path='/:postName/:postDate' element={<SinglePost />} />
+
             </Route>
+            <Route path='signup' element={<Signup />} />
+            <Route path='signin' element={<Signin />} />
+            <Route path='logout' element={<Logout />} />
 
             <Route path='admin' element={<AdminLayout />}>
               <Route index element={'dashboard'} />

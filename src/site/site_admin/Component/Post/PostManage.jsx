@@ -22,7 +22,7 @@ export default function PostManage() {
     const columns = [
         {
             title: 'Title',
-            dataIndex: 'postTitle',
+            dataIndex: 'title',
             render: (txt, row) => (<>{txt}
                 <div className="itemAction d-flex">
                     <span onClick={() => onEdit(row)}>Edit</span>
@@ -36,7 +36,7 @@ export default function PostManage() {
         },
         {
             title: 'Categories',
-            dataIndex: 'postTerms',
+            dataIndex: 'terms',
             key: 'postTerms',
             render: (txt) => txt != null && (<>
                 {txt.map((item) => (<Tag style={{ margin: '4px' }} key={item.id}>{item.name}</Tag>))}
@@ -45,7 +45,7 @@ export default function PostManage() {
         },
         {
             title: 'Tags',
-            dataIndex: 'postTags',
+            dataIndex: 'tags',
             key: 'postTags',
             render: (txt) => txt != null && (<>
                 {txt.map((item) => (<Tag style={{ margin: '4px' }} key={item.id}>{item.name}</Tag>))}
@@ -56,21 +56,21 @@ export default function PostManage() {
             title: 'Comments',
             dataIndex: 'commentCount',
             key: 'commentCount',
-            render: (txt) => txt !== 0 ? (<><Badge size="small" count={txt} overflowCount={5}>
-                <Avatar shape="square" size="small" />
-            </Badge></>) : '-',
+            render: (txt) => txt === 0 ? '-': (<><Badge size="small" count={txt} overflowCount={5}>
+            <Avatar shape="square" size="small" />
+        </Badge></>),
             sorter: (a, b) => a.commentCount - b.commentCount,
         },
         {
             title: 'Author',
-            dataIndex: 'postAuthor',
+            dataIndex: 'author',
             key: 'postAuthor',
             sorter: (a, b) => a.postAuthor.length - b.postAuthor.length,
         }
         ,
         {
             title: 'Date',
-            dataIndex: 'postDate',
+            dataIndex: 'createdDate',
             key: 'postDate',
             sorter: (a, b) => {
                 return new Date(a.postDate).getTime() - new Date(b.postDate).getTime();

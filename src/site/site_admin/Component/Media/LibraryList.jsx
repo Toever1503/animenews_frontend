@@ -2,14 +2,16 @@ import { Popconfirm, message, Row, Col, Input, Select, Form, Button, Pagination,
 import React,{ useEffect, useState } from 'react';
 import { deleteImageByName, getImages, updateImage, getImageDates } from '../../../../axios/common_api/image_api';
 import { CopyOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import {closeMediaLibrary } from '../../../../reducers/mediaLibraryReducer';
 
 export default function LibraryList() {
     const { Search } = Input;
     const { Option } = Select;
     const [form] = Form.useForm();
 
-    const autoFresh = useSelector(state=> state.mediaLibrary.open);
+    const autoFresh = useSelector(state=> state.mediaLibrary.open.status);
+    const callback = useSelector(state=> state.mediaLibrary.open.func);
 
     const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const [listImages, setListImages] = useState([]);
@@ -24,6 +26,11 @@ export default function LibraryList() {
         current: 1,
         total: 0
     });
+    const dispatch = useDispatch();
+
+    const closeLibrary = () => {
+        dispatch(closeMediaLibrary());
+    }
 
     const onSearchImage = keyword => {
         setImageDetail(null);
@@ -126,6 +133,11 @@ export default function LibraryList() {
         }).catch(err => {
             console.log('delete image error!');
         });
+    }
+
+    const onChooseImage = () => {
+        callback(imageDetail);
+        closeLibrary();
     }
 
     const copyImageUrl = (url) => {
@@ -258,6 +270,9 @@ export default function LibraryList() {
 
                                 </Form>
                             </div>
+                            {
+                                imageDetail.imageName !== null && <Button className='imageDetail_choose' style={{float: 'right'}} onClick={onChooseImage}>Choose</Button>
+                            }
                         </>
                     )}
                 </div>

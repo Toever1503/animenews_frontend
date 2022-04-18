@@ -4,10 +4,10 @@ import UploadFile from './UploadFile.jsx';
 import LibraryList from './LibraryList.jsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {closeMediaLibrary} from '../../../../reducers/mediaLibraryReducer';
+import { closeMediaLibrary } from '../../../../reducers/mediaLibraryReducer';
 export default function MediaLibrary() {
     const [dislayMediaLibrary, setDislayMediaLibrary] = useState(false);
-    const activeMediaLibrary =   useSelector(state=> state.mediaLibrary.open);  
+    const activeMediaLibrary = useSelector(state => state.mediaLibrary.open.status);
     const dispatch = useDispatch();
 
     const closeLibrary = () => {
@@ -16,9 +16,9 @@ export default function MediaLibrary() {
 
     useEffect(() => {
         setDislayMediaLibrary(activeMediaLibrary);
-    },[activeMediaLibrary]);
+    }, [activeMediaLibrary]);
 
-    return (
+    return activeMediaLibrary === true ? (
         <>
             <div id="mediaLibrary" className={dislayMediaLibrary === true ? '' : 'd-none'}>
                 <div className='mediaLibrary_content p-2'>
@@ -42,5 +42,5 @@ export default function MediaLibrary() {
                 </div>
             </div>
         </>
-    );
+    ) : '';
 }

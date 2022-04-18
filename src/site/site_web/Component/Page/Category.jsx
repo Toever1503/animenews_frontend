@@ -24,7 +24,7 @@ export default function Categoryzz() {
                         <BreadCrumb create={breadCrumbRoutes} />
                         <PageHeader title='Category' subTitle='post category' style={{padding: 0}} />
                     </div>
-                    <PostBox />
+                    {/* <PostBox />
                     <PostBox />
                     <PostBox />
                     <PostBox />
@@ -34,7 +34,7 @@ export default function Categoryzz() {
                     <PostBox />
                     <PostBox />
                     <PostBox />
-                    <PostBox />
+                    <PostBox /> */}
                     <div className="pageNumber" style={{ gridColumn: '1 / 10', margin: '10px auto' }}>
                         <Pagination defaultCurrent={1} total={99} pageSizeOptions={pageSize} defaultPageSize={12} onChange={pageIndexChange} />
                     </div>

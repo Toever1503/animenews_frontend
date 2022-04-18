@@ -3,14 +3,16 @@ import instance, { auth_bearer } from '../default_api';
 const baseUrl = 'post/';
 
 export const getPost = (id) => {
-    return instance.get(baseUrl + 'id' + id);
+    return instance.get(baseUrl + 'id/' + id);
 }
-export const getPostByGuid = (guid) => {
-    return instance.get(baseUrl + guid);
+export const getPostByName = (name, date) => {
+    return instance.get(baseUrl + `${name}/${date}`);
 }
 export const getPosts = (termId, page, size) => {
-    console.log('term->', termId);
     return instance.get(baseUrl + '?category=' + termId + '&page=' + page + '&size=' + size);
+}
+export const getPostCarousels = (termIds) => {
+    return instance.get(baseUrl +'homeCarousel?termIds=' + termIds);
 }
 
 export const addPost = (body) => {

@@ -1,0 +1,64 @@
+#postSingleContainer{
+    background-color: white;
+    padding: 5px;
+    margin: 10px 0;
+}
+#postSingleContainer .postInfo{
+    font-size: 12px;
+    display: flex;
+    gap: 10px;
+}
+#postSingleContainer h1{
+    font-size: 24px;
+}
+#postSingleContainer #postSingleContent img, #postSingleContainer .nextPrevPost img{
+    height: unset;
+    width: unset;
+}
+#postSingleContainer #postSingleContent{
+    font-size: 15px;
+}
+#postSingleContent figure.aligncenter {
+    text-align: center;
+}
+#postSingleContent figure.alignright{
+    float: right;
+}
+#postSingleContent figure.alignleft{
+    float: left;
+}
+
+
+#postSingleContainer .relatedTag .ant-tag:hover{
+    background-color: lightgrey
+}
+#postSingleContainer .nextPrevPost{
+    display: flex;
+    justify-content: center;
+}
+
+#postSingleContainer .nextPrevPost > a > div{
+    padding: 10px;
+    border: 1px solid lightgrey;
+    border-radius: 5px;
+    margin: 10px;
+    min-width: 250px;
+    min-height: 125px;
+    background-color: #f9f9f99c;
+    display: flex;
+    justify-content: center;
+}
+#postSingleContainer .nextPrevPost > a > div:hover{
+    background-color: #d3d3d32e;
+}
+
+#postSingleContainer .nextPrevPost > a > div img{
+    width: 100px;
+    height: 100%;
+}
+#postSingleContainer .nextPrevPost > a > div .content{
+    display: inline-block;
+    padding: 10px;
+    font-size: 12px;
+    text-align: center;
+}

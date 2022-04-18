@@ -1,11 +1,14 @@
 import instance from '../default_api';
 
-const baseUrl = 'account/';
+const baseUrl = 'user_account/';
 
-export async const login = (body) => {
-    return await instance.post(baseUrl + 'login', body);
+export const login = (body) => {
+    return instance.post(baseUrl + 'login', body);
 }
 
-export async const register = (body) => {
-    return await instance.post(baseUrl + 'register', body);
+export const register = (body) => {
+    return instance.post(baseUrl + 'register', body);
+}
+export const checkUser = (role) => {
+    return instance.get(baseUrl + 'checkToken' + (role !== '' ? `?role=${role}` : '') + role);
 }

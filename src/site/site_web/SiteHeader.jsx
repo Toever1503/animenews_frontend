@@ -25,35 +25,34 @@ export default function SiteHeader() {
         id: 91,
         title: "menu1",
         subMenu: [{
-            id: 11,
+            id: 151,
             title: "sub1"
         }, {
-            id: 12,
+            id: 612,
             title: "sub2"
         }, {
-            id: 13,
+            id: 913,
             title: "sub3"
         }]
     }, {
-        id: 82,
+        id: 825,
         title: "menu2",
         subMenu: []
     }, {
-        id: 23,
+        id: 293,
         title: "menu3",
         subMenu: [{
-            id: 31,
+            id: 331,
             title: "sub31"
         }, {
-            id: 32,
+            id: 332,
             title: "sub32"
         }, {
-            id: 33,
+            id: 313,
             title: "sub33"
         }]
     }];
 
-    console.log(menuList)
     return (
         <>
             <Header style={{ width: '100%', padding: 0, height: '89px' }}>
@@ -61,8 +60,8 @@ export default function SiteHeader() {
                     <div className="content container d-flex">
                         <div className="topHeaderLeft d-flex">
                             <Menu id='secondMenu' them='dark' style={{ width: '100%', background: 'none', border: 'none' }} mode='horizontal'>
-                                <Menu.Item><Button className='d-block' size={'small'}>Login</Button></Menu.Item>
-                                <Menu.Item><Button className='d-block' size={'small'}>Register</Button></Menu.Item>
+                                <Menu.Item key='login'><Button className='d-block' size={'small'}>Login</Button></Menu.Item>
+                                <Menu.Item key='register'><Button className='d-block' size={'small'}>Register</Button></Menu.Item>
                             </Menu>
                         </div>
                         <div className="topHeaderRight">

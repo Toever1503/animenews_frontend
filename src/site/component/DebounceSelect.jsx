@@ -24,7 +24,6 @@ export default function DebounceSelect({ fetchOptions, debounceTimeout = 800, ..
         };
         return debounce(loadOptions, debounceTimeout);
     }, [fetchOptions, debounceTimeout]);
-
     return (
         <Select
             labelInValue

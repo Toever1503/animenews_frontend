@@ -1,0 +1,13 @@
+.account{
+    position: absolute;
+    top: 50%;
+    left: 35%;
+    transform: translateX(45deg);
+    width: 500px;
+    padding: 10px;
+    margin-top: 100px;
+    background-color: #f5f5dc8c;
+}
+.formbtn button{
+    margin: 5px;
+}

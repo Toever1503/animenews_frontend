@@ -27,6 +27,7 @@ export const deleteUsers = (ids) => {
 }
 
 
+
 export const searchUsers = (query, page) => {
     // return  instance.get(id);
     return null;

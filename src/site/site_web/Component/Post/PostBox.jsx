@@ -1,24 +1,31 @@
 import '../../css/postBox.css';
-import {ClockCircleOutlined} from '@ant-design/icons';
-import React from 'react';
-export default function PostBox() {
+import { ClockCircleOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+export default function PostBox(props) {
+    const [postImage, setPostImage] = useState('');
+    const { data } = props;
+
+    const content = data.content.match(/<p[^>]*>([^<]+)<\/p>/);
+    console.log(data.createdDate.substr(0, 10));
+
     return (
         <div className="postBox">
             <div className="singlePost">
                 <div className="postImage h-100">
-                    <img style={{cursor:'pointer', zIndex: '10', position:'relative'}} width='100%' height='100%' src="http://localhost:3000/wp-content/uploads/background.jpg" alt="" />
+                    <img style={{ cursor: 'pointer', zIndex: '10', position: 'relative' }} width='100%' height='100%' src="http://localhost:3000/wp-content/uploads/background.jpg" alt="" />
                 </div>
                 <div className='postContent position-relative'>
-                    <h3 className="postTitle">
-                        Tập cuối cùng World Trigger Season 3 dời lịch lại vào cuối tuần tiếp theo sau khi trì hoãn do cảnh báo sóng thần
-                    </h3>
+                    <Link to={'/' + data.name + '/' + data.createdDate.substr(0, 10)}>
+                        <h3 className="postTitle">
+                            {data.title}
+                        </h3>
+                    </Link>
                     <div className="postInfo">
-                        <span style={{ marginRight: '5px' }}>Posted by Shiki</span>
-                        <span><ClockCircleOutlined style={{margin: '0', padding: '0'}} /> At Tháng Một 17, 2022</span>
+                        <span style={{ marginRight: '5px' }}>Posted by {data.author}</span>
+                        <span><ClockCircleOutlined style={{ margin: '0', padding: '0' }} /> At {data.createdDate}</span>
                     </div>
-                    <div className="postExcert" style={{ transition: '0.4s ease-in-out', position: 'relative' }}>
-                        Tài khoản Twitter chính thức của anime World Trigger đã thông báo vào tối Chủ nhật rằng tập thứ 14 và tập cuối cùng của mùa thứ ba sẽ phát sóng vào thứ Bảy, 
-                    </div>
+                    <div className="postExcert" style={{ transition: '0.4s ease-in-out', position: 'relative' }} dangerouslySetInnerHTML={{ __html: content == null ? '' : content[0] }}></div>
                 </div>
             </div>
         </div>

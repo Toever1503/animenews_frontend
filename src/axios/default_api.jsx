@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosConfig = {
-  baseURL: 'http://localhost:8080/api',
+  baseURL: 'http://localhost:8081/api',
   timeout: 5000,
   // headers: {'application/content-type': 'foobar'}
 };

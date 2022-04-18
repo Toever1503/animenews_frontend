@@ -1,106 +1,164 @@
 import React, { useEffect, useState, useRef } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { PageHeader, Input, Select, Button, Checkbox, Row, Col, notification, message } from 'antd';
+import { PageHeader, Input, Select, Button, Checkbox, notification, message, Form } from 'antd';
 import JoditEditor from 'jodit-pro-react';
 import '../../../site_admin/css/postAddEdit.css';
 import DebounceSelect from '../../../component/DebounceSelect';
 import { searchTags } from '../../../../axios/common_api/tag_api';
 import { useDispatch } from 'react-redux';
 import { openMediaLibrary } from '../../../../reducers/mediaLibraryReducer';
-
+import { getTerms } from '../../../../axios/common_api/term_api';
+import { addPost, getPost } from '../../../../axios/common_api/post_api';
 export default function PostAddEdit() {
 
     const dispatch = useDispatch();
     const navigate = new useNavigate();
     const query = new URLSearchParams(window.location.search);
-
     const typeForm = query.get('type') === 'edit' ? 'edit' : 'new';
+    const [form] = Form.useForm();
+    const [btnSubmitStatus, setBtnSubmitStatus] = useState(true);
 
-    const { TextArea } = Input;
     const { Option } = Select;
 
     // for jodit
-    const editor = useRef(null)
-    const [content, setContent] = useState('')
+    const editor = useRef(null);
+    const [content, setContent] = useState('');
 
     const config = {
         readonly: false // all options from https://xdsoft.net/jodit/doc/
     }
     // end for jodit
-
+    const [postFeaturedImage, setPostFeaturedImage] = useState(null);
     //begin edit post status
-    const [editPostStatus, setEditPostStatus] = useState(false);
-    const onClickEditPostStatus = () => {
-        setEditPostStatus(true);
-    }
-    const onOkEditPostStatus = () => {
-        setEditPostStatus(false);
-    }
-    const onCancelEditPostStatus = () => {
-        setEditPostStatus(false);
-    }
-    const onChangePostStatus = (e) => { }
+    const [postStatus, setPostStatus] = useState('draft');
+    const [postCategory, setPostCategory] = useState(0);
+
+
     // end edit post status
 
     // begin for category
-    const [categoryList, setCategoryList] = useState([
-        {
-            id: 1,
-            name: 'category 1',
-            slug: 'category-1',
-        },
-        {
-            id: 2,
-            name: 'category 2',
-            slug: 'category-2',
-        },
-        {
-            id: 3,
-            name: 'category 3',
-            slug: 'category-3',
-        },
-    ]);
-    const [postCategory, setPostCategory] = useState([
-        'category-3'
-    ]);
-    const [mainCategory, setMainCategory] = useState('');
+    const [categoryList, setCategoryList] = useState([]);
 
-    const onChangeCategory = (cats) => {
-        setPostCategory(cats);
+    const onChangeCategory = () => {
+        setPostCategory(form.getFieldValue('terms').length);
     }
     const onChooseMainCategory = (cat) => {
-        setMainCategory(cat);
+        form.setFieldsValue({
+            mainCategory: cat
+        });
     }
     // end for category
 
     //begin for tag
-    const [tagOpts, setTagOpts] = useState([
-        {
-            key: 't-1',
-            label: 'Tag 1',
-            value: 'tag1'
-        }
-    ]);
-
     const fetchTagSuggestions = async (value) => {
         return searchTags(value, 0, 5).then(body => body.data.content.map(tag => ({
-            key: 't-' + tag.id,
+            key: tag.id,
             label: tag.name,
             value: tag.slug
         })));
     };
     //end for tag
 
-    // save post
-    const onSavePost = () => {
-        console.log('saving post...');
-        if (postCategory.length >= 2 && mainCategory === '') {
+    // post
+
+    const publishPost = () => {
+        form.setFieldsValue({
+            status: 'publish'
+        });
+        setPostStatus('publish');
+    }
+    // save draft
+    const draftPost = () => {
+        form.setFieldsValue({
+            status: 'draft'
+        })
+        setPostStatus('draft');
+    };
+
+    const onSubmitForm = (post) => {
+        if (postCategory >= 2 && post.mainCategory === undefined) {
             openNotification('warn', 'Please select main category');
             return;
         }
+        post = getPostData(post);
+        console.log('submit', post);
+        addPost(post)
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => console.log(err));
+    };
+
+    const getPostData = (post) => {
+        let originalMetas = form.getFieldValue('metas');
+        const postMetas = [];
+
+
+        if (originalMetas !== undefined) {
+            let check = {
+                featuredImage: false,
+                main_category: false
+            };
+            originalMetas = originalMetas.map(meta => {
+                if (meta.metaKey === 'featuredImage' && post.featuredImage !== undefined) {
+                    check.featuredImage = true;
+                    return {
+                        id: meta.id,
+                        metaKey: meta.metaKey,
+                        metaValue: post.featuredImage
+                    };
+                }
+                else if (meta.metaKey === 'main_category' && post.mainCategory !== undefined) {
+                    check.main_category = true;
+                    return {
+                        id: meta.id,
+                        metaKey: meta.metaKey,
+                        metaValue: post.mainCategory
+                    };
+                }
+                else
+                    return meta;
+            });
+            if (!check.featuredImage && post.featuredImage !== undefined)
+                originalMetas.push({
+                    metaKey: 'featuredImage',
+                    metaValue: post.featuredImage
+                });
+            if (!check.main_category && post.mainCategory !== undefined)
+                originalMetas.push({
+                    metaKey: 'main_category',
+                    metaValue: post.mainCategory
+                });
+        }
+        else {
+            originalMetas = postMetas;
+        }
+        return {
+            title: post.title,
+            content: content,
+            status: post.status,
+            name: post.name === undefined ? post.title : post.name,
+            tags: post.tags.map(tag => {
+                return { id: tag.key, name: tag.label === undefined ? tag.value : tag.label, slug: tag.value };
+            }),
+            terms: post.terms.map(t => categoryList.find(c => c.id === t)),
+            metas: originalMetas
+        };
     }
     // end save post
+
+    // const choose featured image post
+    const chooseFeaturedPost = () => {
+        showImageLibrary(setFeaturedPostFromLibrary);
+    };
+
+    const setFeaturedPostFromLibrary = (img) => {
+        setPostFeaturedImage(img.id);
+        form.setFieldsValue({
+            featuredImage: img.id
+        });
+    }
 
     const openNotification = (type, message) => {
         notification[type]({
@@ -108,8 +166,9 @@ export default function PostAddEdit() {
         });
     }
 
-    const showImageLibrary = () => {
-        dispatch(openMediaLibrary());
+    const showImageLibrary = (callback) => {
+        console.log(form.getFieldValue('terms'));
+        dispatch(openMediaLibrary(typeof (callback) !== 'function' ? () => { } : callback));
     }
 
     const emmbedTwitter = () => {
@@ -126,7 +185,56 @@ export default function PostAddEdit() {
 
 
 
+    const onChangeTitle = (e) => {
+        e.target.value.length === '' ? setBtnSubmitStatus(true) : setBtnSubmitStatus(false);
+    }
     useEffect(() => {
+        form.setFieldsValue({
+            tags: [],
+            terms: [],
+        });
+        getTerms(0, 100)
+            .then(res => {
+                const { data } = res;
+                setCategoryList(data.content);
+            });
+        const pId = query.get('postId');
+        if (pId != null) {
+            getPost(pId)
+                .then(res => {
+                    const { data } = res;
+                    form.setFieldsValue({
+                        title: data.title,
+                        status: data.status,
+                        name: data.name,
+                        terms: data.terms.map(term => term.id),
+                        metas: data.metas,
+                        tags: data.tags.map(tag => {
+                            return {
+                                key: tag.id,
+                                label: tag.slug,
+                                value: tag.name
+                            };
+                        })
+                    });
+                    data.metas !== null && data.metas.forEach(meta => {
+                        if (meta.metaKey === 'featuredImage') {
+                            form.setFieldsValue({
+                                mainCategory: meta.metaValue
+                            });
+                            setPostFeaturedImage(meta.metaValue);
+                        }
+                        else if (meta.metaKey === 'main_category')
+                            form.setFieldsValue({
+                                mainCategory: meta.metaValue
+                            });
+                    });
+                    setBtnSubmitStatus(data.status === 'draft');
+                    setPostStatus(data.status);
+                    setPostCategory(data.terms.length);
+                    setContent(data.content);
+                }).catch(err => console.log(err));
+        }
 
     }, [])
 
@@ -138,89 +246,110 @@ export default function PostAddEdit() {
                     onBack={() => navigate('/admin/posts')}
                     title={typeForm === 'new' ? 'Add New Post' : 'Edit Post'}
                 />
-                <div className="formPost row">
-                    <div className="formPostLeft col-9">
-                        <div className="formPost__title mb-2">
-                            <TextArea placeholder="Write title for post here..." autoSize />
+                <Form onFinish={onSubmitForm} form={form} autoComplete='off'>
+                    <Form.Item className='d-none' name='id'>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item className='d-none' name='featuredImage' value=''>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item className='d-none' name='mainCategory' value=''>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item className='d-none' name='status'>
+                        <Input className='col-4 d-none' />
+                    </Form.Item>
+                    <div className="formPost row">
+                        <div className="formPostLeft col-9">
+                            <div className="formPost__title mb-2">
+                                <Form.Item style={{ fontWeight: 'bolder' }} onChange={onChangeTitle} required={true} name='title'>
+                                    <Input placeholder="Write title for post here..." />
+                                </Form.Item>
+                            </div>
+                            <div className="formPost__content position-relative">
+                                <JoditEditor
+                                    ref={editor}
+                                    value={content}
+                                    config={config}
+                                    tabIndex={1} // tabIndex of textarea
+                                    onBlur={newContent => setContent(content => newContent)}  // preferred to use only this option to update the content for performance reasons
+                                />
+                            </div>
                         </div>
-                        <div className="formPost__content position-relative">
-                            <JoditEditor
-                                ref={editor}
-                                value={content}
-                                config={config}
-                                tabIndex={1} // tabIndex of textarea
-                                onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
-                                onChange={newContent => { }}
-                            />
-                        </div>
-                    </div>
-                    <div className="formPostRight col-3">
-                        {/* begin publish action */}
-                        <div className="postPublishAction mt-0">
-                            <b>Publish</b>
-                            <hr />
-                            <div className="postStatus row">
-                                <p className='col-6'>Status: <span>Draft</span></p>
-                                <p className='col-6' style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue', display: editPostStatus === true ? 'none' : '' }} onClick={onClickEditPostStatus}>Edit</p>
-                                <div className="changePostStatus mb-2" style={{ display: editPostStatus === false ? 'none' : 'block' }}>
-                                    <Select className='m-0' defaultValue="draft">
-                                        <Option value="lucy">Lucy</Option>
-                                    </Select>
-                                    <div className="btn btn-outline-primary p-1" style={{ margin: '0 2px' }} onClick={onOkEditPostStatus}>Ok</div>
-                                    <div className="btn btn-outline-primary p-1" onClick={onCancelEditPostStatus}>Cancel</div>
+                        <div className="formPostRight col-3">
+                            {/* begin publish action */}
+                            <div className="postPublishAction mt-0">
+                                <b>Publish</b>
+                                <hr />
+                                <div className="postStatus">
+                                    <p>Status: <b>{postStatus}</b></p>
+                                </div>
+                                <div className="publishAction">
+                                    <Button disabled={btnSubmitStatus} onClick={draftPost} htmlType='submit'>Save draft</Button>
+                                    <Button style={{ float: 'right' }} onClick={publishPost} disabled={btnSubmitStatus} htmlType='submit'>Publish</Button>
                                 </div>
                             </div>
-                            <div className="publishAction">
-                                <Button>Save draft</Button>
-                                <Button style={{ float: 'right' }} onClick={onSavePost}>Publish</Button>
+                            {/* end publish action */}
+
+                            <div className="addtionalPostPlugin">
+                                <Button type="primary" size='small' onClick={showImageLibrary}>Images</Button>
+                                <Button type="primary" size='small' onClick={emmbedTwitter}>Emmbed</Button>
                             </div>
-                        </div>
-                        {/* end publish action */}
 
-                        <div className="addtionalPostPlugin">
-                            <Button type="primary" size='small' onClick={showImageLibrary}>Images</Button>
-                            <Button type="primary" size='small' onClick={emmbedTwitter}>Emmbed</Button>
-                        </div>
-
-                        {/* begin category action */}
-                        <div className="categoryAction">
-                            <b>Category</b>
-                            <hr />
-                            <Checkbox.Group style={{ width: '100%' }} defaultValue={postCategory} onChange={onChangeCategory}>
-                                <Row>
-                                    {
-                                        categoryList.map(cat => (
-                                            <Col key={'c-' + cat.id}>
-                                                <Checkbox value={cat.slug}>{cat.name}</Checkbox>
-                                            </Col>
-                                        ))
-                                    }
-                                </Row>
-                            </Checkbox.Group>
-                            <div className="mainCategory" style={{ display: postCategory.length >= 2 ? 'block' : 'none' }}>
+                            {/* begin category action */}
+                            <div className="categoryAction">
+                                <b>Category</b>
                                 <hr />
-                                <Select className='m-0' defaultValue={mainCategory} onChange={onChooseMainCategory}>
-                                    <Option value="Default">Default</Option>
-                                    <Option value="News">News</Option>
-                                    <Option value="Manga">Manga</Option>
-                                    <Option value="Gane">Gane</Option>
-                                </Select>
-                                <label style={{ fontSize: 12, marginLeft: '5px' }}>Main category?</label>
+                                <Form.Item name='terms' defaultValue={[]} onChange={onChangeCategory}>
+                                    <Checkbox.Group>
+                                        {
+                                            categoryList.map(cat => (
+                                                <Checkbox key={cat.id} value={cat.id}> {cat.name}</Checkbox>
+                                            ))
+                                        }
+                                    </Checkbox.Group>
+                                </Form.Item>
+                                <div className="mainCategory" style={{ display: postCategory >= 2 ? 'block' : 'none' }}>
+                                    <hr />
+                                    <Select className='m-0' onChange={onChooseMainCategory}>
+                                        {categoryList.length !== 0 && categoryList.map(cat => (
+                                            <Option key={cat.id} value={cat.id}>{cat.name}</Option>
+                                        ))}
+                                    </Select>
+                                    <label style={{ fontSize: 12, marginLeft: '5px' }}>Main category?</label>
+                                </div>
+                            </div>
+                            {/* end category action */}
+
+                            {/* begin tags action */}
+                            <div className="tagAction">
+                                <b>Tag</b>
+                                <hr />
+                                <Form.Item name='tags' >
+                                    <DebounceSelect className='m-0' mode="tags" style={{ width: '100%' }} loading={true} fetchOptions={fetchTagSuggestions} placeholder="Enter Tags... " />
+                                </Form.Item>
+                            </div>
+                            {/* end tags action */}
+                            <div className="tagAction">
+                                <b>Featured Image</b>
+                                <hr />
+                                <div className="featuredImage">
+                                    {postFeaturedImage !== null &&
+                                        <div className="featuredImage__image">
+                                            <img src={postFeaturedImage} alt="featuredImage" />
+                                        </div>
+                                    }
+                                    <div className="featuredImage__action">
+                                        {postFeaturedImage === null ?
+                                            <Button type="primary" size='small' onClick={chooseFeaturedPost} >Choose Image</Button> :
+                                            <Button type="primary" size='small' onClick={() => setPostFeaturedImage(null)} >Remove Image</Button>}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        {/* end category action */}
-
-                        {/* begin tags action */}
-                        <div className="tagAction">
-                            <b>Tag</b>
-                            <hr />
-                            <DebounceSelect className='m-0' defaultValue={tagOpts} mode="tags" style={{ width: '100%' }} onChange={(newValue) => {
-                                setTagOpts(newValue);
-                            }} loading={true} fetchOptions={fetchTagSuggestions} placeholder="Enter Tags... " />
-                        </div>
-                        {/* end tags action */}
                     </div>
-                </div>
+                </Form>
+
             </div>
         </>
     );
