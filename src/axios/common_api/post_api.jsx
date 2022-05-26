@@ -9,34 +9,38 @@ export const getPostByName = (name, date) => {
     return instance.get(baseUrl + `${name}/${date}`);
 }
 export const getPosts = (termId, page, size) => {
-    return instance.get(baseUrl + '?category=' + termId + '&page=' + page + '&size=' + size);
+    return instance.get(baseUrl + '?category=' + termId + '&page=' + page + '&size=' + size + '&sort=id,desc');
 }
 export const getPostCarousels = (termIds) => {
-    return instance.get(baseUrl +'homeCarousel?termIds=' + termIds);
+    return instance.get(baseUrl + 'homeCarousel?termIds=' + termIds);
+}
+
+export const getSinglePost = (name, date) => {
+    return instance.get(baseUrl + `${name}/${date}`);
 }
 
 export const addPost = (body) => {
-    return instance.post(baseUrl, body, auth_bearer);
+    return instance.post(baseUrl, body, auth_bearer());
 }
 
 export const addPostElasticsearch = (body) => {
-    return instance.post(baseUrl + 'elasticsearch', body, auth_bearer);
+    return instance.post(baseUrl + 'elasticsearch', body, auth_bearer());
 }
 
 export const addPostTags = (body) => {
-    return instance.post(baseUrl + 'PostTags', body, auth_bearer);
+    return instance.post(baseUrl + 'PostTags', body, auth_bearer());
 }
 
 export const addPostTerms = (body) => {
-    return instance.post(baseUrl + 'PostTerms', body, auth_bearer);
+    return instance.post(baseUrl + 'PostTerms', body, auth_bearer());
 }
 
 export const addPostMetas = (body) => {
-    return instance.post(baseUrl + 'PostMetas', body, auth_bearer);
+    return instance.post(baseUrl + 'PostMetas', body, auth_bearer());
 }
 
 export const updatePost = (body) => {
-    return instance.patch(baseUrl + body.id, body, auth_bearer);
+    return instance.patch(baseUrl + body.id, body, auth_bearer());
 }
 
 export const deletePost = (id) => {
@@ -44,11 +48,10 @@ export const deletePost = (id) => {
 }
 
 export const deletePosts = (ids) => {
-    return instance.post(baseUrl + 'delete/batch', ids, auth_bearer);
+    return instance.post(baseUrl + 'delete/batch', ids, auth_bearer());
 }
 
-export const searchPosts = (query, page) => {
-    // return  instance.get(id);
-    return null;
+export const searchPosts = (q, page, size) => {
+    return instance.get(baseUrl + '_search/' + q + '?page=' + page + '&size=' + size+'&sort=id,desc');
 }
 

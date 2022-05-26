@@ -1,12 +1,24 @@
 import '../../css/postSumary.css';
 import React from 'react';
-export default function PostSumary() {
+import { Link } from 'react-router-dom';
+export default function PostSumary(props) {
+    const { data } = props;
+    let postImage = null;
+    if (data.metas !== null && data.metas.length !== 0) {
+        const img = data.metas.find(meta => meta.metaKey === 'featuredImage');
+        if (img !== undefined)
+            postImage = img.metaValue;
+    }
     return (
         <>
             <div className="postSumary">
-                <div className="postCover" style={{ backgroundImage: "url('http://localhost:3000/wp-content/uploads/visual.jpg')" }}></div>
+                <div className="postCover" style={{ backgroundImage: `url(${postImage})` }}></div>
                 <div className="postTitle">
-                    <h3>Kadokawa phát hành series light novel Higehiro, I’m Quitting Heroing, The Insipid Prince’s Furtive Grab for the Throne</h3>
+                    <Link to={'/' + data.name + '/' + data.createdDate.substr(0, 10)}>
+                        <h3 className="postTitle">
+                            {data.title.substr(0, 140) + '...'}
+                        </h3>
+                    </Link>
                     <span className="postedTime"> Tháng Một 12, 2022  Shiki</span>
                 </div>
             </div>

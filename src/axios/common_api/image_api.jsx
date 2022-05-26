@@ -11,11 +11,11 @@ export const getImageDates = () => {
 }
 
 export const addImage = (body) => {
-    return instance.post(baseUrl, body, auth_bearer);
+    return instance.post(baseUrl, body, auth_bearer());
 }
 
 export const updateImage = (body) => {
-    return instance.patch(baseUrl + '/' + body.imageName, body, auth_bearer);
+    return instance.patch(baseUrl + '/' + body.imageName, body, auth_bearer());
 }
 
 export const deleteImageByName = (name) => {

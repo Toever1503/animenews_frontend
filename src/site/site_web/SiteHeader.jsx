@@ -1,6 +1,6 @@
 import { Menu, Layout, Button, Input, Tag } from 'antd';
 import 'antd/dist/antd.min.css';
-import React,{ useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './css/header.css';
 import {
     TwitterOutlined,
@@ -8,12 +8,15 @@ import {
     FacebookOutlined,
     LinkedinOutlined,
 } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
+import { getCookie } from '../site_admin/AdminLayout';
 
 const { Search } = Input;
-const { SubMenu } = Menu;
 
 export default function SiteHeader() {
+    const navigate = new useNavigate();
     const [isMobile, updateIsMobile] = useState(0);
+    const hasLogged = getCookie('userLogged') !== undefined;
 
     useEffect(() => {
         if (window.screen.width < 1000)
@@ -22,36 +25,31 @@ export default function SiteHeader() {
 
     const { Header } = Layout;
     const menuList = [{
-        id: 91,
-        title: "menu1",
-        subMenu: [{
-            id: 151,
-            title: "sub1"
-        }, {
-            id: 612,
-            title: "sub2"
-        }, {
-            id: 913,
-            title: "sub3"
-        }]
+        id: 151,
+        title: "News",
+        url: 'news'
     }, {
-        id: 825,
-        title: "menu2",
-        subMenu: []
+        id: 612,
+        title: "Manga",
+        url: 'manga'
     }, {
-        id: 293,
-        title: "menu3",
-        subMenu: [{
-            id: 331,
-            title: "sub31"
-        }, {
-            id: 332,
-            title: "sub32"
-        }, {
-            id: 313,
-            title: "sub33"
-        }]
+        id: 913,
+        title: "game",
+        url: 'game'
     }];
+
+    const onclickMenu = (url) => {
+        navigate('/' + url);
+    }
+
+    const logoutApp = () => {
+        document.cookie = "userLogged=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        window.location.href = '/';
+    }
+
+    const search = (value) => {
+        navigate('/search/' + value);
+    }
 
     return (
         <>
@@ -59,13 +57,19 @@ export default function SiteHeader() {
                 <div className='bg-primary topHeader'>
                     <div className="content container d-flex">
                         <div className="topHeaderLeft d-flex">
+
                             <Menu id='secondMenu' them='dark' style={{ width: '100%', background: 'none', border: 'none' }} mode='horizontal'>
-                                <Menu.Item key='login'><Button className='d-block' size={'small'}>Login</Button></Menu.Item>
-                                <Menu.Item key='register'><Button className='d-block' size={'small'}>Register</Button></Menu.Item>
+                                {hasLogged !== true ?
+                                    <>
+                                        <Menu.Item key='login'><Button className='d-block' size={'small'}><Link to='/signin'>Login</Link></Button></Menu.Item>
+                                        <Menu.Item key='register'><Button className='d-block' size={'small'}><Link to='/signup'>Register</Link></Button></Menu.Item>
+                                    </> :
+                                    <Menu.Item key='register'><Button className='d-block' size={'small'} onClick={logoutApp}>Logout</Button></Menu.Item>}
                             </Menu>
+
                         </div>
                         <div className="topHeaderRight">
-                            <Tag style={{height:'24px'}} icon={<TwitterOutlined style={{height:'24px'}} />} color="#55acee">
+                            <Tag style={{ height: '24px' }} icon={<TwitterOutlined style={{ height: '24px' }} />} color="#55acee">
                                 Twitter
                             </Tag>
                             <Tag icon={<YoutubeOutlined />} color="#cd201f">
@@ -81,24 +85,15 @@ export default function SiteHeader() {
                     </div>
                 </div>
                 <div className='container content d-flex' >
-                    <div className="logo" onClick={() => { window.location.href = '/' }} />
+                    <div className="logo" onClick={() => { navigate('/') }} />
                     <Menu id='mainMenu' theme="dark" mode={isMobile === 0 ? 'horizontal' : 'vertical'} defaultSelectedKeys={['2']}>
                         {
-                            menuList.map(menu => {
-                                if (menu.subMenu.length === 0)
-                                    return <Menu.Item key={menu.id}>{menu.title}</Menu.Item>
-                                else
-                                    return <SubMenu key={menu.id} title={menu.title}>
-                                        {
-                                            menu.subMenu.map(mnItem => {
-                                                return <Menu.Item key={mnItem.id}>{mnItem.title}</Menu.Item>;
-                                            })
-                                        }
-                                    </SubMenu>
-                            })
+                            menuList.map(menu =>
+                                <Menu.Item onClick={() => onclickMenu(menu.url)} key={menu.id}>{menu.title}</Menu.Item>
+                            )
                         }
                     </Menu>
-                    <Search placeholder="Tìm kiếm" loading style={{ margin: 'auto', maxWidth: '450px' }} />
+                    <Search placeholder="Tìm kiếm" onSearch={search} style={{ margin: 'auto', maxWidth: '450px' }} />
                 </div>
             </Header>
 

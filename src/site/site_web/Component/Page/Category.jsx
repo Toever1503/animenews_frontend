@@ -4,40 +4,68 @@ import PostBox from "../Post/PostBox";
 // import PostSumary from "../Post/PostSumary";
 import { PageHeader, Pagination } from 'antd';
 import '../../css/pageCategory.css';
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { getTerm } from "../../../../axios/common_api/term_api";
+import { getPosts } from "../../../../axios/common_api/post_api";
 
 export default function Categoryzz() {
     const { category } = useParams();
-    const breadCrumbRoutes = [];
+    const breadCrumbRoutes = [{
+        name: 'news'
+    }];
+
+    const [catId, setCatId] = useState(null);
+    const [posts, setPosts] = React.useState([]);
+
+    // 
     breadCrumbRoutes.push(category);
 
-    const pageSize = [9, 12, 36];
+    const pageSizes = [12, 16, 20];
     const pageIndexChange = (page, pageSize) => {
         console.log(page + "-" + pageSize)
+        getPosts(catId, page - 1, pageSize)
+            .then(res => {
+                const { data } = res;
+                setPosts(data.content);
+                console.log(data)
+            }).catch(err => console.log(err));
     }
 
-    return (
+    useEffect(() => {
+        getTerm(category)
+            .then(res => {
+                if (res.data === '') { }
+                else {
+                    setCatId(res.data.id);
+                    getPosts(res.data.id, 0, pageSizes[0])
+                        .then(res => {
+                            const { data } = res;
+                            setPosts(data.content);
+                            console.log(data)
+                        }).catch(err => console.log(err));
+                }
+
+            })
+            .catch(err => console.log(err));
+    }, [category]);
+
+    return posts.length !== 0 && (
         <>
             <div className="main-content pageCategory">
+                <div className="categoryInfo">
+                    <BreadCrumb create={breadCrumbRoutes} />
+                </div>
                 <div className="boxContainer">
-                    <div className="categoryInfo" style={{ gridColumn: '1 / 10' }}>
-                        <BreadCrumb create={breadCrumbRoutes} />
-                        <PageHeader title='Category' subTitle='post category' style={{padding: 0}} />
-                    </div>
-                    {/* <PostBox />
-                    <PostBox />
-                    <PostBox />
-                    <PostBox />
-                    <PostBox />
-                    
-                    <PostBox />
-                    <PostBox />
-                    <PostBox />
-                    <PostBox />
-                    <PostBox /> */}
-                    <div className="pageNumber" style={{ gridColumn: '1 / 10', margin: '10px auto' }}>
-                        <Pagination defaultCurrent={1} total={99} pageSizeOptions={pageSize} defaultPageSize={12} onChange={pageIndexChange} />
-                    </div>
+
+                    {posts.length > 0 && posts.map(post => (
+                        <>
+                            <PostBox key={'newPost_' + post.id} height='180px' data={post} />
+                        </>
+                    ))}
+
+                </div>
+                <div className="pageNumber d-flex justify-content-center" style={{ margin: '10px auto' }}>
+                    <Pagination defaultCurrent={1} total={99} pageSizeOptions={pageSizes} defaultPageSize={12} onChange={pageIndexChange} />
                 </div>
                 {/* <article>
                     <div className="suggestPost">

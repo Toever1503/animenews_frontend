@@ -2,8 +2,8 @@ import instance, { auth_bearer } from '../default_api';
 
 const baseUrl = 'term/';
 
-export const getTerm = (id) => {
-    return instance.get(baseUrl + id);
+export const getTerm = (slug) => {
+    return instance.get(baseUrl + slug);
 }
 
 export const getTerms = (page, size) => {
@@ -11,11 +11,11 @@ export const getTerms = (page, size) => {
 }
 
 export const addTerm = (body) => {
-    return instance.post(baseUrl, body, auth_bearer);
+    return instance.post(baseUrl, body, auth_bearer());
 }
 
 export const updateTerm = (body) => {
-    return instance.patch(baseUrl+body.id, body, auth_bearer);
+    return instance.patch(baseUrl+body.id, body, auth_bearer());
 }
 
 export const deleteTerm = (id) => {
@@ -23,7 +23,7 @@ export const deleteTerm = (id) => {
 }
 
 export const deleteTerms = (ids) => {
-    return instance.post(baseUrl + 'delete/batch', ids, auth_bearer);
+    return instance.post(baseUrl + 'delete/batch', ids, auth_bearer());
 }
 
 export const searchTerms = (query, page) => {

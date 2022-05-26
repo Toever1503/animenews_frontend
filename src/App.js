@@ -25,6 +25,9 @@ import Signup from './site/component/Signup';
 import Signin from './site/component/Signin';
 import SinglePost from './site/site_web/Component/Post/SinglePost';
 import Logout from './site/component/Logout';
+import ActiveAccount from './site/component/ActiveAccount';
+import Page_404 from './site/site_admin/Component/Page/Page_404';
+import Menu_Setting from './site/site_admin/Component/settings/Menu_setting';
 
 function App() {
   return (
@@ -44,7 +47,8 @@ function App() {
               <Route path='search/:q' element={<Search />} />
               <Route path='/:category' element={<Categoryzz />} />
               <Route path='/:postName/:postDate' element={<SinglePost />} />
-
+              <Route path='account/active' element={<ActiveAccount />} />
+              <Route path='404' element={<Page_404 />} />
             </Route>
             <Route path='signup' element={<Signup />} />
             <Route path='signin' element={<Signin />} />
@@ -79,7 +83,9 @@ function App() {
               <Route path='Users' element={<UserManage />} />
               <Route path='user_new' element={<UserNewEdit />} />
 
-              <Route path='settings' element={'all settings'} />
+              <Route path='settings'>
+                <Route path='menu' element={<Menu_Setting />} />
+              </Route>
             </Route>
           </Routes>
         </BrowserRouter>

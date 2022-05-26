@@ -11,6 +11,7 @@ export default function Signin() {
         result: null,
         message: null
     });
+    const query = new URLSearchParams(window.location.search);
     const onFinish = (body) => {
         console.log('Success:', body);
         login(body)
@@ -23,7 +24,7 @@ export default function Signin() {
                     })
                 }
                 else {
-                    setCookie('userLogged', 'bearer ' + res.data, body.remember === true ? (7 * 86400) : 1800)
+                    setCookie('userLogged', 'bearer_' + res.data, body.remember === true ? (7 * 86400) : 1800)
                     setResult({
                         result: true,
                         message: 'Login Successfully!'
@@ -100,9 +101,9 @@ export default function Signin() {
                     {
                         result.result !== null ? (<>
                             <p className='p-1 bg-warning rounded text-white'>{result.message}{result.result === true ? '. You will be redirect to home after 3s..' : ''}</p>
-                            {result.result === true ? (setTimeout(()=>{
-                                navigate('/');
-                            }, 3000 )): ''}
+                            {result.result === true ? (setTimeout(() => {
+                                navigate(query.get('redirect') === null ? '/' : query.get('redirect'));
+                            }, 3000)) : ''}
                         </>) : null
                     }
                     <Form.Item

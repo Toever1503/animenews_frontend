@@ -4,6 +4,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { deletePosts, deletePost, getPosts } from '../../../../axios/common_api/post_api';
 import { useNavigate } from 'react-router';
 import { getTerms } from '../../../../axios/common_api/term_api';
+import {Link} from 'react-router-dom';
 
 export default function PostManage() {
     const query = new URLSearchParams(window.location.search);
@@ -27,7 +28,9 @@ export default function PostManage() {
                 <div className="itemAction d-flex">
                     <span onClick={() => onEdit(row)}>Edit</span>
                     <span style={{ borderLeft: '1px solid gray', borderRight: '1px solid gray' }} onClick={() => onDelete(row)}>Delete</span>
-                    <span>View</span>
+                    <span>
+                        <Link to={'/'+row.name+'/'+row.createdDate.substr(0,10)}>View</Link>
+                    </span>
                 </div>
             </>),
             key: 'postTitle',
@@ -80,6 +83,7 @@ export default function PostManage() {
     const onEdit = (row) => {
         navigate("/admin/post_new?type=edit&postId=" + row.id);
     }
+
     const onDelete = (row) => {
         showModalConfirm(() => {
             deletePost(row.id).then(res => {
@@ -218,14 +222,14 @@ export default function PostManage() {
                 </div>
 
                 <div className="tagList">
-                    <div className="listRoleWeb">
+                    {/* <div className="listRoleWeb">
                         <p style={{ borderLeft: 'unset' }}>All <span>(24)</span></p>
                         <p>Mine <span>(4)</span></p>
                         <p>Pubnished <span>(5)</span></p>
                         <p>Sticky <span>(5)</span></p>
                         <p>Draft <span>(5)</span></p>
                         <p>Trashed <span>(5)</span></p>
-                    </div>
+                    </div> */}
 
                     <div className="tagAction">
                         <div className="bulkAndSearch mb-3" style={{ minHeight: '30px' }}>

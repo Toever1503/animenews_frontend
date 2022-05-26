@@ -9,7 +9,7 @@ import { searchTags } from '../../../../axios/common_api/tag_api';
 import { useDispatch } from 'react-redux';
 import { openMediaLibrary } from '../../../../reducers/mediaLibraryReducer';
 import { getTerms } from '../../../../axios/common_api/term_api';
-import { addPost, getPost } from '../../../../axios/common_api/post_api';
+import { addPost, getPost, updatePost } from '../../../../axios/common_api/post_api';
 export default function PostAddEdit() {
 
     const dispatch = useDispatch();
@@ -81,13 +81,29 @@ export default function PostAddEdit() {
             openNotification('warn', 'Please select main category');
             return;
         }
-        post = getPostData(post);
         console.log('submit', post);
-        addPost(post)
+        const obj = getPostData(post);
+
+        if(post.id !== undefined){
+            console.log('update post')
+
+            updatePost({...obj, id: post.id})
             .then(res => {
                 console.log(res);
+                openNotification('success', 'Update post successfully!');
             })
             .catch(err => console.log(err));
+        }
+        else{
+            console.log('add new post');
+            addPost(post)
+            .then(res => {
+                console.log(res);
+                openNotification('success', 'Add new post successfully!');
+            })
+            .catch(err => console.log(err));
+        }
+        
     };
 
     const getPostData = (post) => {
@@ -204,6 +220,7 @@ export default function PostAddEdit() {
                 .then(res => {
                     const { data } = res;
                     form.setFieldsValue({
+                        id: data.id,
                         title: data.title,
                         status: data.status,
                         name: data.name,
@@ -336,7 +353,7 @@ export default function PostAddEdit() {
                                 <div className="featuredImage">
                                     {postFeaturedImage !== null &&
                                         <div className="featuredImage__image">
-                                            <img src={postFeaturedImage} alt="featuredImage" />
+                                            <img height='100%' src={postFeaturedImage} alt="featuredImage" />
                                         </div>
                                     }
                                     <div className="featuredImage__action">

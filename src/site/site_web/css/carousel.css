@@ -1,13 +1,14 @@
-#carouselHome{
+#carouselHome {
     height: 400px;
 }
 
-.postCarousel{
+.postCarousel {
     height: 100%;
     width: 100%;
     background-size: cover;
 }
-.postContent{
+
+.postContent {
     width: 100%;
     position: absolute;
     bottom: 0;
@@ -16,69 +17,98 @@
     padding: 7px;
     transition: 0.4s ease-in-out;
 }
-.postContent.show{
+
+
+.postContent.show {
     animation: showPostContentExcert 0.5s forwards;
 }
-.postContent.hide{
+
+.carouselHomeLeft .postContent.hide {
     animation: hidePostContentExcert 0.5s forwards;
 }
-/* .postContent.hide .postExcert{
-    animation: opacityFrame 0.3s forwards;
+
+.carouselHomeRight .postContent.hide {
+    animation: hidePostContentExcertRight 0.5s forwards ;
 }
-@keyframes opacityFrame {
-    from{
-        opacity: 0.1;
+
+@keyframes hidePostContentExcertRight {
+    from {
+        bottom: 0px;
     }
-    to{
-        opacity: 1;
+
+    to {
+        bottom: -55px;
     }
-} */
+}
 @keyframes hidePostContentExcert {
-    from{
-       bottom: 0;
+    from {
+        bottom: 0px;
     }
-    to{
-        bottom: -47px;
+
+    to {
+        bottom: -48px;
     }
 }
+
 @keyframes showPostContentExcert {
-    from{
-       bottom: -70px;
+    from {
+        bottom: -70px;
     }
-    to{
+
+    to {
         bottom: 0;
     }
 }
-.postContent .postTitle{
+
+.postContent .postTitle {
     font-size: 16px;
     font-weight: bold;
-    margin: 0;
     cursor: pointer;
+    margin-bottom: 5px;
 }
-.postContent .postTitle:hover{
+
+.postContent .postTitle a {
+    color: white;
+}
+
+.postContent .postTitle:hover {
     text-decoration: underline;
 }
-.postContent img:hover + .postContent .postBlur{
+
+.postContent img:hover+.postContent .postBlur {
     display: block;
 }
 
-.postContent .postInfo{
+.postContent .postInfo {
     font-size: 13px;
+    margin-bottom: 5px;
+    color: slateblue;
+}
+#carouselHome .postInfo{
+    color: bisque
 }
 
-.postCarousel .postBlur{
+.postCarousel .postBlur {
     position: absolute;
     height: 100%;
     width: 100%;
-    top: 0; left: 0;
+    top: 0;
+    left: 0;
     z-index: 1;
     transition: 0.5s ease-in-out;
     animation: showPostBlur 0.5s forwards;
 }
+
 @keyframes showPostBlur {
-    from {background-color: unset;}
-    to {background-color: #00000038;}
+    from {
+        background-color: unset;
+    }
+
+    to {
+        background-color: #00000038;
+    }
 }
+
 /* .carouselHomeRight{
     display: grid;
     grid-template-columns: repeat(auto-fill, 49%);

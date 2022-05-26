@@ -2,18 +2,18 @@ import instance, { auth_bearer } from '../default_api';
 
 const baseUrl = 'option/';
 
-export async const getOptions = (optionName) => {
-    return await instance.get(baseUrl + optionName);
+export  const getOptions = (optionName) => {
+    return  instance.get(baseUrl + optionName);
 }
 
-export async const addOption = (body) => {
-    return await instance.post(baseUrl, body, auth_bearer);
+export  const addOption = (body) => {
+    return  instance.post(baseUrl, body, auth_bearer());
 }
 
-export async const updateOption = (body) => {
-    return await instance.patch(baseUrl + body.id, body, auth_bearer);
+export  const updateOption = (body) => {
+    return  instance.patch(baseUrl + body.id, body, auth_bearer());
 }
 
-export async const deleteOption = (id) => {
-    return await instance.delete(baseUrl + id);
+export  const deleteOption = (id) => {
+    return  instance.delete(baseUrl + id);
 }

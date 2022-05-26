@@ -1,8 +1,9 @@
 import axios from "axios";
-
+import { getCookie } from "../site/site_admin/AdminLayout";
 const axiosConfig = {
   baseURL: 'http://localhost:8081/api',
   timeout: 5000,
+  withCredentials: true,
   // headers: {'application/content-type': 'foobar'}
 };
 
@@ -21,7 +22,7 @@ export default instance;
 export const auth_bearer = () => {
   return {
     headers: {
-      'Authorization': `Bearer`
+      'Authorization': getCookie('userLogged')
     }
   };
 }

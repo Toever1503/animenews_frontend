@@ -11,11 +11,11 @@ export const getUsers = (page, size) => {
 }
 
 export const addUser = (body) => {
-    return instance.post(baseUrl, body, auth_bearer);
+    return instance.post(baseUrl, body, auth_bearer());
 }
 
 export const updateUser = (body) => {
-    return instance.patch(baseUrl, body, auth_bearer);
+    return instance.patch(baseUrl, body, auth_bearer());
 }
 
 export const deleteUser = (id) => {
@@ -23,7 +23,7 @@ export const deleteUser = (id) => {
 }
 
 export const deleteUsers = (ids) => {
-    return instance.post(baseUrl + 'delete/batch', ids, auth_bearer);
+    return instance.post(baseUrl + 'delete/batch', ids, auth_bearer());
 }
 
 

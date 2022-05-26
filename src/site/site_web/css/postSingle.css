@@ -1,5 +1,4 @@
 #postSingleContainer{
-    background-color: white;
     padding: 5px;
     margin: 10px 0;
 }
@@ -11,15 +10,18 @@
 #postSingleContainer h1{
     font-size: 24px;
 }
-#postSingleContainer #postSingleContent img, #postSingleContainer .nextPrevPost img{
+/* #postSingleContainer #postSingleContent img, #postSingleContainer .nextPrevPost img{
     height: unset;
     width: unset;
-}
+} */
 #postSingleContainer #postSingleContent{
     font-size: 15px;
 }
 #postSingleContent figure.aligncenter {
     text-align: center;
+}
+#postSingleContent figure.aligncenter.size-full img {
+    width: 100%;
 }
 #postSingleContent figure.alignright{
     float: right;
